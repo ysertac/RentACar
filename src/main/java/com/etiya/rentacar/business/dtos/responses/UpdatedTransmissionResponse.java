@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class CreatedTransmissionResponse {
+@AllArgsConstructor
+public class UpdatedTransmissionResponse {
     private long id;
     private String name;
-    private LocalDateTime createdTime;
-    private LocalDateTime updatedTime;
-    private LocalDateTime deletedTime;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
+    private LocalDateTime deletedDate;
 }

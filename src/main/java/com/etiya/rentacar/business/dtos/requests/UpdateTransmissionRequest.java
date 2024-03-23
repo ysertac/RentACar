@@ -1,7 +1,5 @@
 package com.etiya.rentacar.business.dtos.requests;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,8 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateTransmissionRequest {
-    @NotNull
-    @Size(min = 2, max = 15)
+public class UpdateTransmissionRequest {
     private String name;
 }

@@ -57,6 +57,9 @@ public class BrandManager implements BrandService {
         GetBrandResponse getBrandResponse = new GetBrandResponse();
         getBrandResponse.setId(foundBrand.get().getId());
         getBrandResponse.setName(foundBrand.get().getName());
+        getBrandResponse.setCreatedTime(foundBrand.get().getCreatedDate());
+        getBrandResponse.setUpdatedTime(foundBrand.get().getUpdatedDate());
+        getBrandResponse.setDeletedTime(foundBrand.get().getDeletedDate());
 
         return getBrandResponse;
     }

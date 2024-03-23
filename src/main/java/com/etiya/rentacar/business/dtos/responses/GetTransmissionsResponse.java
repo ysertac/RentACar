@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class GetFuelsResponse {
-    private List<String> fuels;
+@NoArgsConstructor
+public class GetTransmissionsResponse {
+    private List<String> transmissions;
 }
