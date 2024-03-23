@@ -2,9 +2,8 @@ package com.etiya.rentacar.business.concretes;
 
 import com.etiya.rentacar.business.abstracts.ModelService;
 import com.etiya.rentacar.business.dtos.requests.CreateModelRequest;
-import com.etiya.rentacar.business.dtos.responses.CreatedModelResponse;
-import com.etiya.rentacar.business.dtos.responses.GetModelResponse;
-import com.etiya.rentacar.business.dtos.responses.GetModelsResponse;
+import com.etiya.rentacar.business.dtos.requests.UpdateModelRequest;
+import com.etiya.rentacar.business.dtos.responses.*;
 import com.etiya.rentacar.dataAccess.abstracts.BrandRepository;
 import com.etiya.rentacar.dataAccess.abstracts.FuelRepository;
 import com.etiya.rentacar.dataAccess.abstracts.ModelRepository;
@@ -30,13 +29,15 @@ public class ModelManager implements ModelService {
     private TransmissionRepository transmissionRepository;
 
     @Override
+    public Model findByName(String name) {
+        return modelRepository.findByName(name).get(0);
+    }
+
+    @Override
     public GetModelResponse findById(long id) {
         Optional<Model> foundModel = modelRepository.findById(id);
-//        Optional<Brand> modelBrand = brandRepository.findById(foundModel.get().getBrand().getId());
-//        Optional<Fuel> modelFuel = fuelRepository.findById(foundModel.get().getFuel().getId());
-//        Optional<Transmission> modelTransmission = transmissionRepository.findById(foundModel.get().getTransmission().getId());
-
         GetModelResponse getModelResponse = new GetModelResponse();
+
         getModelResponse.setId(foundModel.get().getId());
         getModelResponse.setName(foundModel.get().getName());
         getModelResponse.setCreatedDate(foundModel.get().getCreatedDate());
@@ -79,5 +80,50 @@ public class ModelManager implements ModelService {
         createdModelResponse.setName(createdModel.getName());
         createdModelResponse.setCreatedTime(createdModel.getCreatedDate());
         return createdModelResponse;
+    }
+
+    @Override
+    public UpdatedModelResponse update(UpdateModelRequest updateModelRequest, long id) {
+        Optional<Model> foundModel = modelRepository.findById(id);
+        Brand foundBrand = brandRepository.findByName(updateModelRequest.getBrandName()).get(0);
+        Fuel foundFuel = fuelRepository.findByName(updateModelRequest.getFuelName()).get(0);
+        Transmission foundTransmission = transmissionRepository.findByName(updateModelRequest.getTransmissionName()).get(0);
+        UpdatedModelResponse updatedModelResponse = new UpdatedModelResponse();
+
+        foundModel.get().setId(id);
+        foundModel.get().setName(updateModelRequest.getName());
+        foundModel.get().setUpdatedDate(LocalDateTime.now());
+        foundModel.get().setBrand(foundBrand);
+        foundModel.get().setFuel(foundFuel);
+        foundModel.get().setTransmission(foundTransmission);
+        Model updatedModel = modelRepository.save(foundModel.get());
+
+        updatedModelResponse.setId(updatedModel.getId());
+        updatedModelResponse.setName(updatedModel.getName());
+        updatedModelResponse.setCreatedTime(updatedModel.getCreatedDate());
+        updatedModelResponse.setUpdatedTime(updatedModel.getUpdatedDate());
+        updatedModelResponse.setDeletedTime(updatedModel.getDeletedDate());
+        updatedModelResponse.setBrandName(updatedModel.getBrand().getName());
+        updatedModelResponse.setFuelName(updatedModel.getFuel().getName());
+        updatedModelResponse.setTransmissionName(updatedModel.getTransmission().getName());
+        return updatedModelResponse;
+    }
+
+    @Override
+    public DeletedModelResponse delete(long id) {
+        Optional<Model> foundModel = modelRepository.findById(id);
+        DeletedModelResponse deletedModelResponse = new DeletedModelResponse();
+
+        deletedModelResponse.setId(foundModel.get().getId());
+        deletedModelResponse.setName(foundModel.get().getName());
+        deletedModelResponse.setCreatedDate(foundModel.get().getCreatedDate());
+        deletedModelResponse.setUpdatedDate(foundModel.get().getUpdatedDate());
+        deletedModelResponse.setDeletedDate(LocalDateTime.now());
+        deletedModelResponse.setBrandName(foundModel.get().getBrand().getName());
+        deletedModelResponse.setFuelName(foundModel.get().getFuel().getName());
+        deletedModelResponse.setTransmissionName(foundModel.get().getTransmission().getName());
+
+        modelRepository.delete(foundModel.get());
+        return deletedModelResponse;
     }
 }

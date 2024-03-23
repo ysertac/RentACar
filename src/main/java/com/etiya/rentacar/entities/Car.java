@@ -19,23 +19,11 @@ public class Car extends BaseEntity {
     @Column(name = "state")
     private int state;
 
-    @Column(name = "slate")
-    private String slate;
-
-    @Column(name = "engineCapacity")
-    private double engineCapacity;
-
-    @Column(name = "horsePower")
-    private double horsePower;
-
-    @Column(name = "peopleCapacity")
-    private int peopleCapacity;
-
-    @Column(name = "color")
-    private String color;
+    @Column(name = "plate")
+    private String plate;
 
     @Column(name = "price")
-    private double price;
+    private double dailyPrice;
 
     @ManyToOne
     @JoinColumn(name = "modelId")

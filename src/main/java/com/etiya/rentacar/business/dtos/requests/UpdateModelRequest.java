@@ -7,10 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateCarRequest {
-    private int modelYear;
-    private int state;
-    private String plate;
-    private double dailyPrice;
-    private String modelName;
+public class UpdateModelRequest {
+    private String name;
+    private String fuelName;
+    private String transmissionName;
+    private String brandName;
 }

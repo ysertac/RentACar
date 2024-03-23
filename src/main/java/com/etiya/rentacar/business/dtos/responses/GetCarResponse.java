@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreatedCarResponse {
+public class GetCarResponse {
     private long id;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;

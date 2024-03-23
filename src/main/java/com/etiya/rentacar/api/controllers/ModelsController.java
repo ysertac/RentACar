@@ -2,9 +2,8 @@ package com.etiya.rentacar.api.controllers;
 
 import com.etiya.rentacar.business.abstracts.ModelService;
 import com.etiya.rentacar.business.dtos.requests.CreateModelRequest;
-import com.etiya.rentacar.business.dtos.responses.CreatedModelResponse;
-import com.etiya.rentacar.business.dtos.responses.GetModelResponse;
-import com.etiya.rentacar.business.dtos.responses.GetModelsResponse;
+import com.etiya.rentacar.business.dtos.requests.UpdateModelRequest;
+import com.etiya.rentacar.business.dtos.responses.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -31,5 +30,15 @@ public class ModelsController {
     @ResponseStatus(HttpStatus.CREATED)
     public CreatedModelResponse add(@RequestBody CreateModelRequest createModelRequest) {
         return modelService.add(createModelRequest);
+    }
+
+    @PutMapping("/{id}")
+    public UpdatedModelResponse update(@RequestBody UpdateModelRequest updateModelRequest, @PathVariable long id) {
+        return modelService.update(updateModelRequest, id);
+    }
+
+    @DeleteMapping("/{id}")
+    public DeletedModelResponse delete(@PathVariable long id) {
+        return modelService.delete(id);
     }
 }
