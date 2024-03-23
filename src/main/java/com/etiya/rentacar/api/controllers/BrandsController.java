@@ -17,7 +17,7 @@ public class BrandsController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreatedBrandResponse add(@Valid @RequestBody CreateBrandRequest createBrandRequest) {
+    public CreatedBrandResponse add(@Valid @RequestBody CreateBrandRequest createBrandRequest) throws Exception {
         return brandService.add(createBrandRequest);
     }
 

@@ -1,6 +1,9 @@
 package com.etiya.rentacar.business.concretes;
 
+import com.etiya.rentacar.business.abstracts.BrandService;
+import com.etiya.rentacar.business.abstracts.FuelService;
 import com.etiya.rentacar.business.abstracts.ModelService;
+import com.etiya.rentacar.business.abstracts.TransmissionService;
 import com.etiya.rentacar.business.dtos.requests.ModelRequests.CreateModelRequest;
 import com.etiya.rentacar.business.dtos.requests.ModelRequests.UpdateModelRequest;
 import com.etiya.rentacar.business.dtos.responses.ModelResponses.*;
@@ -24,9 +27,9 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ModelManager implements ModelService {
     private ModelRepository modelRepository;
-    private BrandRepository brandRepository;
-    private FuelRepository fuelRepository;
-    private TransmissionRepository transmissionRepository;
+    private BrandService brandService;
+    private FuelService fuelService;
+    private TransmissionService transmissionService;
 
     @Override
     public Model findByName(String name) {
@@ -64,9 +67,9 @@ public class ModelManager implements ModelService {
     @Override
     public CreatedModelResponse add(CreateModelRequest createModelRequest) {
         Model model = new Model();
-        Brand foundBrand = brandRepository.findByName(createModelRequest.getBrandName()).get(0);
-        Fuel foundFuel = fuelRepository.findByName(createModelRequest.getFuelName()).get(0);
-        Transmission foundTransmission = transmissionRepository.findByName(createModelRequest.getTransmissionName()).get(0);
+        Brand foundBrand = brandService.findByName(createModelRequest.getName());
+        Fuel foundFuel = fuelService.findByName(createModelRequest.getFuelName());
+        Transmission foundTransmission = transmissionService.findByName(createModelRequest.getTransmissionName());
         CreatedModelResponse createdModelResponse = new CreatedModelResponse();
 
         model.setName(createModelRequest.getName());
@@ -85,9 +88,9 @@ public class ModelManager implements ModelService {
     @Override
     public UpdatedModelResponse update(UpdateModelRequest updateModelRequest, long id) {
         Optional<Model> foundModel = modelRepository.findById(id);
-        Brand foundBrand = brandRepository.findByName(updateModelRequest.getBrandName()).get(0);
-        Fuel foundFuel = fuelRepository.findByName(updateModelRequest.getFuelName()).get(0);
-        Transmission foundTransmission = transmissionRepository.findByName(updateModelRequest.getTransmissionName()).get(0);
+        Brand foundBrand = brandService.findByName(updateModelRequest.getName());
+        Fuel foundFuel = fuelService.findByName(updateModelRequest.getFuelName());
+        Transmission foundTransmission = transmissionService.findByName(updateModelRequest.getTransmissionName());
         UpdatedModelResponse updatedModelResponse = new UpdatedModelResponse();
 
         foundModel.get().setId(id);

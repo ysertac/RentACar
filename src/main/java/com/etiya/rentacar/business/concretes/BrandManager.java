@@ -22,19 +22,23 @@ public class BrandManager implements BrandService {
     }
 
     @Override
-    public CreatedBrandResponse add(CreateBrandRequest createBrandRequest) {
-
+    public CreatedBrandResponse add(CreateBrandRequest createBrandRequest) throws Exception {
+        List<Brand> foundBrand = brandRepository.findByName(createBrandRequest.getName());
+        CreatedBrandResponse createdBrandResponse = new CreatedBrandResponse();
+        if (foundBrand.isEmpty()) {
         Brand brand = new Brand();
         brand.setName(createBrandRequest.getName());
         brand.setCreatedDate(LocalDateTime.now());
         Brand createdBrand = brandRepository.save(brand);
 
-        CreatedBrandResponse createdBrandResponse = new CreatedBrandResponse();
         createdBrandResponse.setId(createdBrand.getId());
         createdBrandResponse.setName(createdBrand.getName());
         createdBrandResponse.setCreateDate(createdBrand.getCreatedDate());
-
         return createdBrandResponse;
+
+        } else {
+            throw new Exception(foundBrand.get(0).getName() + " is already exists");
+        }
     }
 
     @Override
@@ -62,6 +66,11 @@ public class BrandManager implements BrandService {
         getBrandResponse.setDeletedTime(foundBrand.get().getDeletedDate());
 
         return getBrandResponse;
+    }
+
+    @Override
+    public Brand findByName(String name) {
+        return brandRepository.findByName(name).get(0);
     }
 
     @Override

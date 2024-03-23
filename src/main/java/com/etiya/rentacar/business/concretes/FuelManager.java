@@ -35,7 +35,6 @@ public class FuelManager implements FuelService {
         return createdFuelResponse;
     }
 
-
     @Override
     public GetFuelsResponse findAll() {
         List<Fuel> allFuels = fuelRepository.findAll();
@@ -58,6 +57,11 @@ public class FuelManager implements FuelService {
         getFuelResponse.setUpdatedTime(foundFuel.get().getUpdatedDate());
         getFuelResponse.setDeletedTime(foundFuel.get().getDeletedDate());
         return getFuelResponse;
+    }
+
+    @Override
+    public Fuel findByName(String name) {
+        return fuelRepository.findByName(name).get(0);
     }
 
     @Override

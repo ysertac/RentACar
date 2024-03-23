@@ -3,10 +3,7 @@ package com.etiya.rentacar.api.controllers;
 import com.etiya.rentacar.business.abstracts.CarService;
 import com.etiya.rentacar.business.dtos.requests.CarRequests.CreateCarRequest;
 import com.etiya.rentacar.business.dtos.requests.CarRequests.UpdateCarRequest;
-import com.etiya.rentacar.business.dtos.responses.CarResponses.CreatedCarResponse;
-import com.etiya.rentacar.business.dtos.responses.CarResponses.GetCarResponse;
-import com.etiya.rentacar.business.dtos.responses.CarResponses.GetCarsResponse;
-import com.etiya.rentacar.business.dtos.responses.CarResponses.UpdatedCarResponse;
+import com.etiya.rentacar.business.dtos.responses.CarResponses.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +32,13 @@ public class CarsController {
         return carService.add(createCarRequest);
     }
 
-    @PutMapping
-    public UpdatedCarResponse update(@RequestBody UpdateCarRequest updateCarRequest, long id) {
+    @PutMapping("/{id}")
+    public UpdatedCarResponse update(@RequestBody UpdateCarRequest updateCarRequest, @PathVariable long id) {
         return carService.update(updateCarRequest, id);
+    }
+
+    @DeleteMapping("/{id}")
+    public DeletedCarResponse delete(@PathVariable long id) {
+        return carService.delete(id);
     }
 }

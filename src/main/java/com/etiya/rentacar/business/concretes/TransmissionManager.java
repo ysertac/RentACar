@@ -47,6 +47,11 @@ public class TransmissionManager implements TransmissionService {
     }
 
     @Override
+    public Transmission findByName(String name) {
+        return transmissionRepository.findByName(name).get(0);
+    }
+
+    @Override
     public CreatedTransmissionResponse add(CreateTransmissionRequest createTransmissionRequest) {
         Transmission transmission = new Transmission();
         transmission.setName(createTransmissionRequest.getName());

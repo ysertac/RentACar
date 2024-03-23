@@ -6,10 +6,7 @@ import com.etiya.rentacar.business.dtos.requests.BrandRequests.UpdateBrandReques
 import com.etiya.rentacar.business.dtos.requests.CarRequests.CreateCarRequest;
 import com.etiya.rentacar.business.dtos.requests.CarRequests.UpdateCarRequest;
 import com.etiya.rentacar.business.dtos.responses.BrandResponses.UpdatedBrandResponse;
-import com.etiya.rentacar.business.dtos.responses.CarResponses.CreatedCarResponse;
-import com.etiya.rentacar.business.dtos.responses.CarResponses.GetCarResponse;
-import com.etiya.rentacar.business.dtos.responses.CarResponses.GetCarsResponse;
-import com.etiya.rentacar.business.dtos.responses.CarResponses.UpdatedCarResponse;
+import com.etiya.rentacar.business.dtos.responses.CarResponses.*;
 import com.etiya.rentacar.dataAccess.abstracts.*;
 import com.etiya.rentacar.entities.Car;
 import lombok.AllArgsConstructor;
@@ -108,5 +105,26 @@ public class CarManager implements CarService {
         updatedCarResponse.setFuelName(updatedCar.getModel().getFuel().getName());
         updatedCarResponse.setTransmissionName(updatedCar.getModel().getTransmission().getName());
         return updatedCarResponse;
+    }
+
+    @Override
+    public DeletedCarResponse delete(long id) {
+        Optional<Car> foundCar = carRepository.findById(id);
+        DeletedCarResponse deletedCarResponse = new DeletedCarResponse();
+
+        deletedCarResponse.setId(foundCar.get().getId());
+        deletedCarResponse.setState(foundCar.get().getState());
+        deletedCarResponse.setPlate(foundCar.get().getPlate());
+        deletedCarResponse.setDailyPrice(foundCar.get().getDailyPrice());
+        deletedCarResponse.setModelYear(foundCar.get().getModelYear());
+        deletedCarResponse.setCreatedDate(foundCar.get().getCreatedDate());
+        deletedCarResponse.setUpdatedDate(foundCar.get().getUpdatedDate());
+        deletedCarResponse.setDeletedDate(LocalDateTime.now());
+        deletedCarResponse.setModelName(foundCar.get().getModel().getName());
+        deletedCarResponse.setFuelName(foundCar.get().getModel().getFuel().getName());
+        deletedCarResponse.setTransmissionName(foundCar.get().getModel().getTransmission().getName());
+        deletedCarResponse.setBrandName(foundCar.get().getModel().getBrand().getName());
+        carRepository.delete(foundCar.get());
+        return deletedCarResponse;
     }
 }
