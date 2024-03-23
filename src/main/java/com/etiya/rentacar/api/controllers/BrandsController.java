@@ -1,10 +1,9 @@
 package com.etiya.rentacar.api.controllers;
 
 import com.etiya.rentacar.business.abstracts.BrandService;
-import com.etiya.rentacar.business.dtos.requests.CreateBrandRequest;
-import com.etiya.rentacar.business.dtos.requests.UpdateBrandRequest;
-import com.etiya.rentacar.business.dtos.responses.*;
-import com.etiya.rentacar.entities.Brand;
+import com.etiya.rentacar.business.dtos.requests.BrandRequests.CreateBrandRequest;
+import com.etiya.rentacar.business.dtos.requests.BrandRequests.UpdateBrandRequest;
+import com.etiya.rentacar.business.dtos.responses.BrandResponses.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -1,8 +1,8 @@
 package com.etiya.rentacar.business.abstracts;
 
-import com.etiya.rentacar.business.dtos.requests.CreateTransmissionRequest;
-import com.etiya.rentacar.business.dtos.requests.UpdateTransmissionRequest;
-import com.etiya.rentacar.business.dtos.responses.*;
+import com.etiya.rentacar.business.dtos.requests.TransmissionRequests.CreateTransmissionRequest;
+import com.etiya.rentacar.business.dtos.requests.TransmissionRequests.UpdateTransmissionRequest;
+import com.etiya.rentacar.business.dtos.responses.TransmissionResponses.*;
 
 public interface TransmissionService {
     GetTransmissionResponse findById(long id);

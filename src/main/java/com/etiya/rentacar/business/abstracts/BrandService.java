@@ -1,9 +1,8 @@
 package com.etiya.rentacar.business.abstracts;
 
-import com.etiya.rentacar.business.dtos.requests.CreateBrandRequest;
-import com.etiya.rentacar.business.dtos.requests.UpdateBrandRequest;
-import com.etiya.rentacar.business.dtos.responses.*;
-import org.hibernate.sql.Update;
+import com.etiya.rentacar.business.dtos.requests.BrandRequests.CreateBrandRequest;
+import com.etiya.rentacar.business.dtos.requests.BrandRequests.UpdateBrandRequest;
+import com.etiya.rentacar.business.dtos.responses.BrandResponses.*;
 
 public interface BrandService {
     CreatedBrandResponse add(CreateBrandRequest brand);

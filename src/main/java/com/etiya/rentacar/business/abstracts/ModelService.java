@@ -1,11 +1,9 @@
 package com.etiya.rentacar.business.abstracts;
 
-import com.etiya.rentacar.business.dtos.requests.CreateModelRequest;
-import com.etiya.rentacar.business.dtos.requests.UpdateModelRequest;
-import com.etiya.rentacar.business.dtos.responses.*;
+import com.etiya.rentacar.business.dtos.requests.ModelRequests.CreateModelRequest;
+import com.etiya.rentacar.business.dtos.requests.ModelRequests.UpdateModelRequest;
+import com.etiya.rentacar.business.dtos.responses.ModelResponses.*;
 import com.etiya.rentacar.entities.Model;
-
-import java.util.List;
 
 public interface ModelService {
     Model findByName(String name);

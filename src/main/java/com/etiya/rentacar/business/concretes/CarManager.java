@@ -2,10 +2,14 @@ package com.etiya.rentacar.business.concretes;
 
 import com.etiya.rentacar.business.abstracts.CarService;
 import com.etiya.rentacar.business.abstracts.ModelService;
-import com.etiya.rentacar.business.dtos.requests.CreateCarRequest;
-import com.etiya.rentacar.business.dtos.responses.CreatedCarResponse;
-import com.etiya.rentacar.business.dtos.responses.GetCarResponse;
-import com.etiya.rentacar.business.dtos.responses.GetCarsResponse;
+import com.etiya.rentacar.business.dtos.requests.BrandRequests.UpdateBrandRequest;
+import com.etiya.rentacar.business.dtos.requests.CarRequests.CreateCarRequest;
+import com.etiya.rentacar.business.dtos.requests.CarRequests.UpdateCarRequest;
+import com.etiya.rentacar.business.dtos.responses.BrandResponses.UpdatedBrandResponse;
+import com.etiya.rentacar.business.dtos.responses.CarResponses.CreatedCarResponse;
+import com.etiya.rentacar.business.dtos.responses.CarResponses.GetCarResponse;
+import com.etiya.rentacar.business.dtos.responses.CarResponses.GetCarsResponse;
+import com.etiya.rentacar.business.dtos.responses.CarResponses.UpdatedCarResponse;
 import com.etiya.rentacar.dataAccess.abstracts.*;
 import com.etiya.rentacar.entities.Car;
 import lombok.AllArgsConstructor;
@@ -76,5 +80,33 @@ public class CarManager implements CarService {
         createdCarResponse.setFuelName(createdCar.getModel().getFuel().getName());
         createdCarResponse.setTransmissionName(createdCar.getModel().getTransmission().getName());
         return createdCarResponse;
+    }
+
+    @Override
+    public UpdatedCarResponse update(UpdateCarRequest updateCarRequest, long id) {
+        Optional<Car> foundCar = carRepository.findById(id);
+        foundCar.get().setId(id);
+        foundCar.get().setState(updateCarRequest.getState());
+        foundCar.get().setPlate(updateCarRequest.getPlate());
+        foundCar.get().setDailyPrice(updateCarRequest.getDailyPrice());
+        foundCar.get().setModelYear(updateCarRequest.getModelYear());
+        foundCar.get().setUpdatedDate(LocalDateTime.now());
+        foundCar.get().setModel(modelService.findByName(updateCarRequest.getModelName()));
+        Car updatedCar = carRepository.save(foundCar.get());
+
+        UpdatedCarResponse updatedCarResponse = new UpdatedCarResponse();
+        updatedCarResponse.setId(updatedCar.getId());
+        updatedCarResponse.setState(updatedCar.getState());
+        updatedCarResponse.setPlate(updatedCar.getPlate());
+        updatedCarResponse.setModelYear(updatedCar.getModelYear());
+        updatedCarResponse.setDailyPrice(updatedCar.getDailyPrice());
+        updatedCarResponse.setCreatedDate(updatedCar.getCreatedDate());
+        updatedCarResponse.setUpdatedDate(updatedCar.getUpdatedDate());
+        updatedCarResponse.setDeletedDate(updatedCar.getDeletedDate());
+        updatedCarResponse.setModelName(updatedCar.getModel().getName());
+        updatedCarResponse.setBrandName(updatedCar.getModel().getBrand().getName());
+        updatedCarResponse.setFuelName(updatedCar.getModel().getFuel().getName());
+        updatedCarResponse.setTransmissionName(updatedCar.getModel().getTransmission().getName());
+        return updatedCarResponse;
     }
 }

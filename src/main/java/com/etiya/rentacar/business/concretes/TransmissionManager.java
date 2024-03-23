@@ -1,9 +1,9 @@
 package com.etiya.rentacar.business.concretes;
 
 import com.etiya.rentacar.business.abstracts.TransmissionService;
-import com.etiya.rentacar.business.dtos.requests.CreateTransmissionRequest;
-import com.etiya.rentacar.business.dtos.requests.UpdateTransmissionRequest;
-import com.etiya.rentacar.business.dtos.responses.*;
+import com.etiya.rentacar.business.dtos.requests.TransmissionRequests.CreateTransmissionRequest;
+import com.etiya.rentacar.business.dtos.requests.TransmissionRequests.UpdateTransmissionRequest;
+import com.etiya.rentacar.business.dtos.responses.TransmissionResponses.*;
 import com.etiya.rentacar.dataAccess.abstracts.TransmissionRepository;
 import com.etiya.rentacar.entities.Transmission;
 import org.springframework.stereotype.Service;

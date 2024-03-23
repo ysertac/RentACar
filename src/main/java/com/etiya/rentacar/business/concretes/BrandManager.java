@@ -1,9 +1,9 @@
 package com.etiya.rentacar.business.concretes;
 
 import com.etiya.rentacar.business.abstracts.BrandService;
-import com.etiya.rentacar.business.dtos.requests.CreateBrandRequest;
-import com.etiya.rentacar.business.dtos.requests.UpdateBrandRequest;
-import com.etiya.rentacar.business.dtos.responses.*;
+import com.etiya.rentacar.business.dtos.requests.BrandRequests.CreateBrandRequest;
+import com.etiya.rentacar.business.dtos.requests.BrandRequests.UpdateBrandRequest;
+import com.etiya.rentacar.business.dtos.responses.BrandResponses.*;
 import com.etiya.rentacar.dataAccess.abstracts.BrandRepository;
 import com.etiya.rentacar.entities.Brand;
 import org.springframework.stereotype.Service;

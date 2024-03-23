@@ -1,9 +1,9 @@
 package com.etiya.rentacar.business.concretes;
 
 import com.etiya.rentacar.business.abstracts.FuelService;
-import com.etiya.rentacar.business.dtos.requests.CreateFuelRequest;
-import com.etiya.rentacar.business.dtos.requests.UpdateFuelRequest;
-import com.etiya.rentacar.business.dtos.responses.*;
+import com.etiya.rentacar.business.dtos.requests.FuelRequests.CreateFuelRequest;
+import com.etiya.rentacar.business.dtos.requests.FuelRequests.UpdateFuelRequest;
+import com.etiya.rentacar.business.dtos.responses.FuelResponses.*;
 import com.etiya.rentacar.dataAccess.abstracts.FuelRepository;
 import com.etiya.rentacar.entities.Fuel;
 import org.springframework.stereotype.Service;
