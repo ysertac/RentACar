@@ -7,10 +7,8 @@ import com.etiya.rentacar.business.abstracts.TransmissionService;
 import com.etiya.rentacar.business.dtos.requests.ModelRequests.CreateModelRequest;
 import com.etiya.rentacar.business.dtos.requests.ModelRequests.UpdateModelRequest;
 import com.etiya.rentacar.business.dtos.responses.ModelResponses.*;
-import com.etiya.rentacar.dataAccess.abstracts.BrandRepository;
-import com.etiya.rentacar.dataAccess.abstracts.FuelRepository;
+import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.ModelRepository;
-import com.etiya.rentacar.dataAccess.abstracts.TransmissionRepository;
 import com.etiya.rentacar.entities.Brand;
 import com.etiya.rentacar.entities.Fuel;
 import com.etiya.rentacar.entities.Model;
@@ -22,11 +20,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class ModelManager implements ModelService {
     private ModelRepository modelRepository;
+    private ModelMapperService modelMapperService;
     private BrandService brandService;
     private FuelService fuelService;
     private TransmissionService transmissionService;
@@ -37,96 +37,54 @@ public class ModelManager implements ModelService {
     }
 
     @Override
-    public GetModelResponse findById(long id) {
-        Optional<Model> foundModel = modelRepository.findById(id);
-        GetModelResponse getModelResponse = new GetModelResponse();
-
-        getModelResponse.setId(foundModel.get().getId());
-        getModelResponse.setName(foundModel.get().getName());
-        getModelResponse.setCreatedDate(foundModel.get().getCreatedDate());
-        getModelResponse.setUpdatedDate(foundModel.get().getUpdatedDate());
-        getModelResponse.setDeletedDate(foundModel.get().getDeletedDate());
-        getModelResponse.setBrandName(foundModel.get().getBrand().getName());
-        getModelResponse.setFuelName(foundModel.get().getFuel().getName());
-        getModelResponse.setTransmissionName(foundModel.get().getTransmission().getName());
-        return getModelResponse;
+    public GetModelsResponse findById(long id) {
+        Model foundModel = modelRepository.findById(id).orElse(null);
+        GetModelsResponse getModelsResponse = modelMapperService.forResponse()
+                .map(foundModel, GetModelsResponse.class);
+        return getModelsResponse;
     }
 
     @Override
-    public GetModelsResponse findAll() {
-        List<String> modelNames = new ArrayList<>();
+    public List<GetModelsResponse> findAll() {
         List<Model> allModels = modelRepository.findAll();
-        GetModelsResponse getModelsResponse = new GetModelsResponse();
-        for (Model m : allModels) {
-            modelNames.add(m.getName());
-        }
-        getModelsResponse.setModelNames(modelNames);
+        List<GetModelsResponse> getModelsResponse = allModels.stream().map(model -> modelMapperService.forResponse()
+                .map(model, GetModelsResponse.class)).collect(Collectors.toList());
         return getModelsResponse;
     }
 
     @Override
     public CreatedModelResponse add(CreateModelRequest createModelRequest) {
-        Model model = new Model();
-        Brand foundBrand = brandService.findByName(createModelRequest.getName());
-        Fuel foundFuel = fuelService.findByName(createModelRequest.getFuelName());
-        Transmission foundTransmission = transmissionService.findByName(createModelRequest.getTransmissionName());
-        CreatedModelResponse createdModelResponse = new CreatedModelResponse();
-
-        model.setName(createModelRequest.getName());
+        Model model = modelMapperService.forRequest().map(createModelRequest, Model.class);
         model.setCreatedDate(LocalDateTime.now());
-        model.setBrand(foundBrand);
-        model.setFuel(foundFuel);
-        model.setTransmission(foundTransmission);
-        Model createdModel = modelRepository.save(model);
+        Model createdModel =  modelRepository.save(model);
 
-        createdModelResponse.setId(createdModel.getId());
-        createdModelResponse.setName(createdModel.getName());
-        createdModelResponse.setCreatedTime(createdModel.getCreatedDate());
+        CreatedModelResponse createdModelResponse = modelMapperService.forResponse()
+                .map(createdModel,CreatedModelResponse.class);
+
         return createdModelResponse;
     }
 
     @Override
-    public UpdatedModelResponse update(UpdateModelRequest updateModelRequest, long id) {
-        Optional<Model> foundModel = modelRepository.findById(id);
-        Brand foundBrand = brandService.findByName(updateModelRequest.getName());
-        Fuel foundFuel = fuelService.findByName(updateModelRequest.getFuelName());
-        Transmission foundTransmission = transmissionService.findByName(updateModelRequest.getTransmissionName());
-        UpdatedModelResponse updatedModelResponse = new UpdatedModelResponse();
+    public UpdatedModelResponse update(UpdateModelRequest updateModelRequest, long id) throws Exception {
+        Model foundModel = modelRepository.findById(id).orElse(null);
+        if (foundModel != null){
+            modelMapperService.forRequest().map(updateModelRequest, foundModel);
+            foundModel.setUpdatedDate(LocalDateTime.now());
+            Model updatedModel = modelRepository.save(foundModel);
 
-        foundModel.get().setId(id);
-        foundModel.get().setName(updateModelRequest.getName());
-        foundModel.get().setUpdatedDate(LocalDateTime.now());
-        foundModel.get().setBrand(foundBrand);
-        foundModel.get().setFuel(foundFuel);
-        foundModel.get().setTransmission(foundTransmission);
-        Model updatedModel = modelRepository.save(foundModel.get());
-
-        updatedModelResponse.setId(updatedModel.getId());
-        updatedModelResponse.setName(updatedModel.getName());
-        updatedModelResponse.setCreatedTime(updatedModel.getCreatedDate());
-        updatedModelResponse.setUpdatedTime(updatedModel.getUpdatedDate());
-        updatedModelResponse.setDeletedTime(updatedModel.getDeletedDate());
-        updatedModelResponse.setBrandName(updatedModel.getBrand().getName());
-        updatedModelResponse.setFuelName(updatedModel.getFuel().getName());
-        updatedModelResponse.setTransmissionName(updatedModel.getTransmission().getName());
-        return updatedModelResponse;
+            return modelMapperService.forResponse().map(updatedModel, UpdatedModelResponse.class);
+        } else {
+            throw new Exception("There is no model with this id");
+        }
     }
 
     @Override
     public DeletedModelResponse delete(long id) {
-        Optional<Model> foundModel = modelRepository.findById(id);
-        DeletedModelResponse deletedModelResponse = new DeletedModelResponse();
+        Model foundModel = modelRepository.findById(id).orElse(null);
+        DeletedModelResponse deletedModelResponse = modelMapperService.forResponse()
+                .map(foundModel, DeletedModelResponse.class);
 
-        deletedModelResponse.setId(foundModel.get().getId());
-        deletedModelResponse.setName(foundModel.get().getName());
-        deletedModelResponse.setCreatedDate(foundModel.get().getCreatedDate());
-        deletedModelResponse.setUpdatedDate(foundModel.get().getUpdatedDate());
-        deletedModelResponse.setDeletedDate(LocalDateTime.now());
-        deletedModelResponse.setBrandName(foundModel.get().getBrand().getName());
-        deletedModelResponse.setFuelName(foundModel.get().getFuel().getName());
-        deletedModelResponse.setTransmissionName(foundModel.get().getTransmission().getName());
-
-        modelRepository.delete(foundModel.get());
+        modelRepository.delete(foundModel);
         return deletedModelResponse;
     }
 }

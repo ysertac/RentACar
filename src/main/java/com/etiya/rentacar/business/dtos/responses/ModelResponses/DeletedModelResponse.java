@@ -15,7 +15,7 @@ public class DeletedModelResponse {
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
     private LocalDateTime deletedDate;
-    private String brandName;
-    private String fuelName;
-    private String transmissionName;
+    private long brandId;
+    private long fuelId;
+    private long transmissionId;
 }

@@ -3,8 +3,11 @@ package com.etiya.rentacar.business.concretes;
 import com.etiya.rentacar.business.abstracts.FuelService;
 import com.etiya.rentacar.business.dtos.requests.FuelRequests.CreateFuelRequest;
 import com.etiya.rentacar.business.dtos.requests.FuelRequests.UpdateFuelRequest;
+import com.etiya.rentacar.business.dtos.responses.BrandResponses.UpdatedBrandResponse;
 import com.etiya.rentacar.business.dtos.responses.FuelResponses.*;
+import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.FuelRepository;
+import com.etiya.rentacar.entities.Brand;
 import com.etiya.rentacar.entities.Fuel;
 import org.springframework.stereotype.Service;
 
@@ -12,86 +15,67 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FuelManager implements FuelService {
     private FuelRepository fuelRepository;
+    private ModelMapperService modelMapperService;
 
-    public FuelManager(FuelRepository fuelRepository) {
+    public FuelManager(FuelRepository fuelRepository, ModelMapperService modelMapperService) {
         this.fuelRepository = fuelRepository;
+        this.modelMapperService = modelMapperService;
     }
 
     @Override
     public CreatedFuelResponse add(CreateFuelRequest createFuelRequest) {
-        Fuel fuel = new Fuel();
-        fuel.setName(createFuelRequest.getName());
+        Fuel fuel = modelMapperService.forRequest().map(createFuelRequest, Fuel.class);
         fuel.setCreatedDate(LocalDateTime.now());
         Fuel createdFuel = fuelRepository.save(fuel);
 
-        CreatedFuelResponse createdFuelResponse = new CreatedFuelResponse();
-        createdFuelResponse.setId(createdFuel.getId());
-        createdFuelResponse.setName(createdFuel.getName());
-        createdFuelResponse.setCreateDate(createdFuel.getCreatedDate());
+        CreatedFuelResponse createdFuelResponse = modelMapperService.forResponse()
+                .map(createdFuel, CreatedFuelResponse.class);
+
         return createdFuelResponse;
     }
 
     @Override
-    public GetFuelsResponse findAll() {
+    public List<GetFuelsResponse> findAll() {
         List<Fuel> allFuels = fuelRepository.findAll();
-        GetFuelsResponse getFuelsResponse = new GetFuelsResponse();
-        List<String> fuelNames = new ArrayList<>();
-        for (Fuel f : allFuels) {
-            fuelNames.add(f.getName());
-        }
-        getFuelsResponse.setFuels(fuelNames);
+        List<GetFuelsResponse> getFuelsResponses = allFuels.stream().map(fuel -> modelMapperService.forResponse()
+                .map(fuel, GetFuelsResponse.class)).collect(Collectors.toList());
+        return getFuelsResponses;
+    }
+
+    @Override
+    public GetFuelsResponse findById(long id) {
+        Fuel foundFuel = fuelRepository.findById(id).orElse(null);
+        GetFuelsResponse getFuelsResponse = modelMapperService.forResponse()
+                .map(foundFuel, GetFuelsResponse.class);
         return getFuelsResponse;
     }
 
     @Override
-    public GetFuelResponse findById(long id) {
-        Optional<Fuel> foundFuel = fuelRepository.findById(id);
-        GetFuelResponse getFuelResponse = new GetFuelResponse();
-        getFuelResponse.setId(foundFuel.get().getId());
-        getFuelResponse.setName(foundFuel.get().getName());
-        getFuelResponse.setCreatedTime(foundFuel.get().getCreatedDate());
-        getFuelResponse.setUpdatedTime(foundFuel.get().getUpdatedDate());
-        getFuelResponse.setDeletedTime(foundFuel.get().getDeletedDate());
-        return getFuelResponse;
-    }
+    public UpdatedFuelResponse update(UpdateFuelRequest updateFuelRequest, long id) throws Exception {
+        Fuel foundFuel = fuelRepository.findById(id).orElse(null);
+        if (foundFuel != null){
+            modelMapperService.forRequest().map(updateFuelRequest, foundFuel);
+            foundFuel.setUpdatedDate(LocalDateTime.now());
+            Fuel updatedFuel = fuelRepository.save(foundFuel);
 
-    @Override
-    public Fuel findByName(String name) {
-        return fuelRepository.findByName(name).get(0);
-    }
-
-    @Override
-    public UpdatedFuelResponse update(UpdateFuelRequest updateFuelRequest, long id) {
-        Optional<Fuel> foundFuel = fuelRepository.findById(id);
-        foundFuel.get().setId(id);
-        foundFuel.get().setName(updateFuelRequest.getName());
-        foundFuel.get().setUpdatedDate(LocalDateTime.now());
-
-        UpdatedFuelResponse updatedFuelResponse = new UpdatedFuelResponse();
-        updatedFuelResponse.setId(foundFuel.get().getId());
-        updatedFuelResponse.setName(foundFuel.get().getName());
-        updatedFuelResponse.setCreateDate(foundFuel.get().getCreatedDate());
-        updatedFuelResponse.setUpdateDate(foundFuel.get().getUpdatedDate());
-
-        fuelRepository.save(foundFuel.get());
-        return updatedFuelResponse;
+            return modelMapperService.forResponse().map(updatedFuel, UpdatedFuelResponse.class);
+        } else {
+            throw new Exception("There is no fuel with this id");
+        }
     }
 
     @Override
     public DeletedFuelResponse delete(long id) {
-        Optional<Fuel> foundFuel = fuelRepository.findById(id);
-        DeletedFuelResponse deletedFuelResponse = new DeletedFuelResponse();
-        deletedFuelResponse.setId(foundFuel.get().getId());
-        deletedFuelResponse.setName(foundFuel.get().getName());
-        deletedFuelResponse.setCreatedDate(foundFuel.get().getCreatedDate());
-        deletedFuelResponse.setUpdatedDate(foundFuel.get().getUpdatedDate());
-        deletedFuelResponse.setDeletedDate(LocalDateTime.now());
-
-        fuelRepository.delete(foundFuel.get());
+        Fuel foundFuel = fuelRepository.findById(id).orElse(null);
+        foundFuel.setDeletedDate(LocalDateTime.now());
+        DeletedFuelResponse deletedFuelResponse = modelMapperService.forResponse()
+                .map(foundFuel, DeletedFuelResponse.class);
+        fuelRepository.delete(foundFuel);
         return deletedFuelResponse;
     }
 }

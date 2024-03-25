@@ -5,11 +5,13 @@ import com.etiya.rentacar.business.dtos.requests.ModelRequests.UpdateModelReques
 import com.etiya.rentacar.business.dtos.responses.ModelResponses.*;
 import com.etiya.rentacar.entities.Model;
 
+import java.util.List;
+
 public interface ModelService {
     Model findByName(String name);
-    GetModelResponse findById(long id);
-    GetModelsResponse findAll();
+    GetModelsResponse findById(long id);
+    List<GetModelsResponse> findAll();
     CreatedModelResponse add(CreateModelRequest createModelRequest);
-    UpdatedModelResponse update(UpdateModelRequest updateModelRequest, long id);
+    UpdatedModelResponse update(UpdateModelRequest updateModelRequest, long id) throws Exception;
     DeletedModelResponse delete(long id);
 }

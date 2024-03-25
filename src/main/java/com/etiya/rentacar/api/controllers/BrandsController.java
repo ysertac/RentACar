@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/brands")
@@ -23,18 +25,19 @@ public class BrandsController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.FOUND)
-    public GetBrandsResponse findAll() {
+    public List<GetBrandsResponse> findAll() {
         return brandService.findAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.FOUND)
-    public GetBrandResponse findById(@PathVariable long id) {
+    public GetBrandsResponse findById(@PathVariable long id) {
         return brandService.findById(id);
     }
 
     @PutMapping("/{id}")
-    public UpdatedBrandResponse update(@PathVariable long id, @RequestBody UpdateBrandRequest updateBrandRequest) {
+    public UpdatedBrandResponse update(@PathVariable long id,
+                                       @RequestBody UpdateBrandRequest updateBrandRequest) throws Exception {
 
         return brandService.update(updateBrandRequest, id);
     }

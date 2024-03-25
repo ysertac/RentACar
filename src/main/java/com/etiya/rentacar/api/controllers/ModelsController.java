@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/models")
@@ -16,13 +18,13 @@ public class ModelsController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.FOUND)
-    public GetModelResponse findById(@PathVariable long id) {
+    public GetModelsResponse findById(@PathVariable long id) {
         return modelService.findById(id);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.FOUND)
-    public GetModelsResponse findAll() {
+    public List<GetModelsResponse> findAll() {
         return modelService.findAll();
     }
 
@@ -33,7 +35,8 @@ public class ModelsController {
     }
 
     @PutMapping("/{id}")
-    public UpdatedModelResponse update(@RequestBody UpdateModelRequest updateModelRequest, @PathVariable long id) {
+    public UpdatedModelResponse update(@RequestBody UpdateModelRequest updateModelRequest,
+                                       @PathVariable long id) throws Exception {
         return modelService.update(updateModelRequest, id);
     }
 

@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/cars")
@@ -16,13 +18,13 @@ public class CarsController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.FOUND)
-    public GetCarsResponse findAll() {
+    public List<GetCarsResponse> findAll() {
         return carService.findAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.FOUND)
-    public GetCarResponse findById(@PathVariable long id) {
+    public GetCarsResponse findById(@PathVariable long id) {
         return carService.findById(id);
     }
 
@@ -33,7 +35,8 @@ public class CarsController {
     }
 
     @PutMapping("/{id}")
-    public UpdatedCarResponse update(@RequestBody UpdateCarRequest updateCarRequest, @PathVariable long id) {
+    public UpdatedCarResponse update(@RequestBody UpdateCarRequest updateCarRequest,
+                                     @PathVariable long id) throws Exception {
         return carService.update(updateCarRequest, id);
     }
 

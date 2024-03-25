@@ -18,8 +18,8 @@ public class DeletedCarResponse {
     private int state;
     private String plate;
     private double dailyPrice;
-    private String modelName;
-    private String brandName;
-    private String fuelName;
-    private String transmissionName;
+    private long modelId;
+    private long brandId;
+    private long fuelId;
+    private long transmissionId;
 }

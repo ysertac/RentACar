@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/transmissions")
@@ -16,13 +18,13 @@ public class TransmissionsController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.FOUND)
-    public GetTransmissionResponse findById(@PathVariable long id) {
+    public GetTransmissionsResponse findById(@PathVariable long id) {
         return transmissionService.findById(id);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.FOUND)
-    public GetTransmissionsResponse findAll() {
+    public List<GetTransmissionsResponse> findAll() {
         return transmissionService.findAll();
     }
 
@@ -34,7 +36,8 @@ public class TransmissionsController {
 
     @PutMapping("/{id}")
     public UpdatedTransmissionResponse update(@PathVariable long id,
-                                              @RequestBody UpdateTransmissionRequest updateTransmissionRequest) {
+                                              @RequestBody UpdateTransmissionRequest updateTransmissionRequest)
+            throws Exception {
         return transmissionService.update(updateTransmissionRequest, id);
     }
 

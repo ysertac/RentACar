@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/fuels")
@@ -23,18 +25,19 @@ public class FuelsController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.FOUND)
-    public GetFuelsResponse findAll() {
+    public List<GetFuelsResponse> findAll() {
         return fuelService.findAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.FOUND)
-    public GetFuelResponse findById(@PathVariable long id) {
+    public GetFuelsResponse findById(@PathVariable long id) {
         return fuelService.findById(id);
     }
 
     @PutMapping("/{id}")
-    public UpdatedFuelResponse update(@PathVariable long id, @RequestBody UpdateFuelRequest updateFuelRequest) {
+    public UpdatedFuelResponse update(@PathVariable long id,
+                                      @RequestBody UpdateFuelRequest updateFuelRequest) throws Exception {
         return fuelService.update(updateFuelRequest, id);
     }
 

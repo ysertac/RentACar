@@ -4,10 +4,12 @@ import com.etiya.rentacar.business.dtos.requests.CarRequests.CreateCarRequest;
 import com.etiya.rentacar.business.dtos.requests.CarRequests.UpdateCarRequest;
 import com.etiya.rentacar.business.dtos.responses.CarResponses.*;
 
+import java.util.List;
+
 public interface CarService {
-    GetCarsResponse findAll();
-    GetCarResponse findById(long id);
+    List<GetCarsResponse> findAll();
+    GetCarsResponse findById(long id);
     CreatedCarResponse add(CreateCarRequest createCarRequest);
-    UpdatedCarResponse update(UpdateCarRequest updateCarRequest, long id);
+    UpdatedCarResponse update(UpdateCarRequest updateCarRequest, long id) throws Exception;
     DeletedCarResponse delete(long id);
 }

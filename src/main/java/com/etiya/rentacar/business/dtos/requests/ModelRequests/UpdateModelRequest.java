@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateModelRequest {
     private String name;
-    private String fuelName;
-    private String transmissionName;
-    private String brandName;
+    private long fuelId;
+    private long transmissionId;
+    private long brandID;
 }

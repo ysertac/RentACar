@@ -15,7 +15,7 @@ public class UpdatedModelResponse {
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
     private LocalDateTime deletedTime;
-    private String brandName;
-    private String fuelName;
-    private String transmissionName;
+    private long brandId;
+    private long fuelId;
+    private long transmissionId;
 }

@@ -5,16 +5,16 @@ import com.etiya.rentacar.business.dtos.requests.FuelRequests.UpdateFuelRequest;
 import com.etiya.rentacar.business.dtos.responses.FuelResponses.*;
 import com.etiya.rentacar.entities.Fuel;
 
+import java.util.List;
+
 public interface FuelService {
     CreatedFuelResponse add(CreateFuelRequest createFuelRequest);
 
-    GetFuelsResponse findAll();
+    List<GetFuelsResponse> findAll();
 
-    GetFuelResponse findById(long id);
+    GetFuelsResponse findById(long id);
 
-    Fuel findByName(String name);
-
-    UpdatedFuelResponse update(UpdateFuelRequest updateFuelRequest, long id);
+    UpdatedFuelResponse update(UpdateFuelRequest updateFuelRequest, long id) throws Exception;
 
     DeletedFuelResponse delete(long id);
 }

@@ -15,4 +15,7 @@ public class CreatedModelResponse {
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
     private LocalDateTime deletedTime;
+    private long brandId;
+    private long fuelId;
+    private long transmissionId;
 }

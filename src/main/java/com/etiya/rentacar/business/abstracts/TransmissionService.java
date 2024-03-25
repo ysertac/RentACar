@@ -5,16 +5,18 @@ import com.etiya.rentacar.business.dtos.requests.TransmissionRequests.UpdateTran
 import com.etiya.rentacar.business.dtos.responses.TransmissionResponses.*;
 import com.etiya.rentacar.entities.Transmission;
 
-public interface TransmissionService {
-    GetTransmissionResponse findById(long id);
+import java.util.List;
 
-    GetTransmissionsResponse findAll();
+public interface TransmissionService {
+    GetTransmissionsResponse findById(long id);
+
+    List<GetTransmissionsResponse> findAll();
 
     Transmission findByName(String name);
 
     CreatedTransmissionResponse add(CreateTransmissionRequest createTransmissionRequest);
 
-    UpdatedTransmissionResponse update(UpdateTransmissionRequest updateTransmissionRequest, long id);
+    UpdatedTransmissionResponse update(UpdateTransmissionRequest updateTransmissionRequest, long id) throws Exception;
 
     DeletedTransmissionResponse delete(long id);
 }

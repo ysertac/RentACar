@@ -12,5 +12,7 @@ import java.time.LocalDateTime;
 public class CreatedBrandResponse {
     private long id;
     private String name;
-    private LocalDateTime createDate;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
+    private LocalDateTime deletedDate;
 }
