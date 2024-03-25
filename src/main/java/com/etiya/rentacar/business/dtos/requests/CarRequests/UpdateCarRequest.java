@@ -12,6 +12,5 @@ public class UpdateCarRequest {
     private int state;
     private String plate;
     private double dailyPrice;
-    //modelId olarak değişecek
-    private String modelName;
+    private long modelId;
 }

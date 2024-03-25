@@ -11,5 +11,5 @@ public class UpdateModelRequest {
     private String name;
     private long fuelId;
     private long transmissionId;
-    private long brandID;
+    private long brandId;
 }

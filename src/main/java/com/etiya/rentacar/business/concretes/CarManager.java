@@ -2,21 +2,20 @@ package com.etiya.rentacar.business.concretes;
 
 import com.etiya.rentacar.business.abstracts.CarService;
 import com.etiya.rentacar.business.abstracts.ModelService;
-import com.etiya.rentacar.business.dtos.requests.BrandRequests.UpdateBrandRequest;
 import com.etiya.rentacar.business.dtos.requests.CarRequests.CreateCarRequest;
 import com.etiya.rentacar.business.dtos.requests.CarRequests.UpdateCarRequest;
-import com.etiya.rentacar.business.dtos.responses.BrandResponses.UpdatedBrandResponse;
-import com.etiya.rentacar.business.dtos.responses.CarResponses.*;
+import com.etiya.rentacar.business.dtos.responses.CarResponses.CreatedCarResponse;
+import com.etiya.rentacar.business.dtos.responses.CarResponses.DeletedCarResponse;
+import com.etiya.rentacar.business.dtos.responses.CarResponses.GetCarsResponse;
+import com.etiya.rentacar.business.dtos.responses.CarResponses.UpdatedCarResponse;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
-import com.etiya.rentacar.dataAccess.abstracts.*;
+import com.etiya.rentacar.dataAccess.abstracts.CarRepository;
 import com.etiya.rentacar.entities.Car;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,9 +58,11 @@ public class CarManager implements CarService {
     public UpdatedCarResponse update(UpdateCarRequest updateCarRequest, long id) throws Exception {
         Car foundCar = carRepository.findById(id).orElse(null);
         if (foundCar != null) {
-            modelMapperService.forRequest().map(updateCarRequest, foundCar);
-            foundCar.setUpdatedDate(LocalDateTime.now());
-            Car updatedCar = carRepository.save(foundCar);
+            Car car = modelMapperService.forRequest().map(updateCarRequest, Car.class);
+            car.setId(id);
+            car.setUpdatedDate(LocalDateTime.now());
+            car.setCreatedDate(foundCar.getCreatedDate());
+            Car updatedCar = carRepository.save(car);
             UpdatedCarResponse updatedCarResponse = modelMapperService.forResponse()
                     .map(updatedCar, UpdatedCarResponse.class);
             return updatedCarResponse;

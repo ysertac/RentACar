@@ -3,18 +3,17 @@ package com.etiya.rentacar.business.concretes;
 import com.etiya.rentacar.business.abstracts.FuelService;
 import com.etiya.rentacar.business.dtos.requests.FuelRequests.CreateFuelRequest;
 import com.etiya.rentacar.business.dtos.requests.FuelRequests.UpdateFuelRequest;
-import com.etiya.rentacar.business.dtos.responses.BrandResponses.UpdatedBrandResponse;
-import com.etiya.rentacar.business.dtos.responses.FuelResponses.*;
+import com.etiya.rentacar.business.dtos.responses.FuelResponses.CreatedFuelResponse;
+import com.etiya.rentacar.business.dtos.responses.FuelResponses.DeletedFuelResponse;
+import com.etiya.rentacar.business.dtos.responses.FuelResponses.GetFuelsResponse;
+import com.etiya.rentacar.business.dtos.responses.FuelResponses.UpdatedFuelResponse;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.FuelRepository;
-import com.etiya.rentacar.entities.Brand;
 import com.etiya.rentacar.entities.Fuel;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

@@ -6,20 +6,18 @@ import com.etiya.rentacar.business.abstracts.ModelService;
 import com.etiya.rentacar.business.abstracts.TransmissionService;
 import com.etiya.rentacar.business.dtos.requests.ModelRequests.CreateModelRequest;
 import com.etiya.rentacar.business.dtos.requests.ModelRequests.UpdateModelRequest;
-import com.etiya.rentacar.business.dtos.responses.ModelResponses.*;
+import com.etiya.rentacar.business.dtos.responses.ModelResponses.CreatedModelResponse;
+import com.etiya.rentacar.business.dtos.responses.ModelResponses.DeletedModelResponse;
+import com.etiya.rentacar.business.dtos.responses.ModelResponses.GetModelsResponse;
+import com.etiya.rentacar.business.dtos.responses.ModelResponses.UpdatedModelResponse;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.ModelRepository;
-import com.etiya.rentacar.entities.Brand;
-import com.etiya.rentacar.entities.Fuel;
 import com.etiya.rentacar.entities.Model;
-import com.etiya.rentacar.entities.Transmission;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,13 +66,15 @@ public class ModelManager implements ModelService {
     public UpdatedModelResponse update(UpdateModelRequest updateModelRequest, long id) throws Exception {
         Model foundModel = modelRepository.findById(id).orElse(null);
         if (foundModel != null){
-            modelMapperService.forRequest().map(updateModelRequest, foundModel);
-            foundModel.setUpdatedDate(LocalDateTime.now());
-            Model updatedModel = modelRepository.save(foundModel);
+        Model model = modelMapperService.forRequest().map(updateModelRequest, Model.class);
+        model.setId(id);
+        model.setCreatedDate(foundModel.getCreatedDate());
+        model.setUpdatedDate(LocalDateTime.now());
+        Model updatedModel = modelRepository.save(model);
 
-            return modelMapperService.forResponse().map(updatedModel, UpdatedModelResponse.class);
+        return modelMapperService.forResponse().map(updatedModel, UpdatedModelResponse.class);
         } else {
-            throw new Exception("There is no model with this id");
+           throw new Exception("There is no model with this id");
         }
     }
 
