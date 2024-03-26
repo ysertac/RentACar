@@ -23,7 +23,7 @@ public class TransmissionBusinessRules {
     public void transmissionNameCannotBeDuplicated(String name){
         Optional<Transmission> transmission = transmissionRepository.findByNameIgnoreCase(name);
 
-        if (transmission.isPresent()){
+        if (transmission.isPresent() && transmission.get().getDeletedDate() == null){
             throw new RuntimeException("This transmission already exists");
         }
     }

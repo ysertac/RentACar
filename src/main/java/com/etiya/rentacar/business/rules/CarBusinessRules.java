@@ -15,7 +15,7 @@ public class CarBusinessRules {
     public void carPlateCannotBeDuplicated(String plate) {
         Optional<Car> car = carRepository.findByPlate(plate);
 
-        if (car.isPresent()){
+        if (car.isPresent() && car.get().getDeletedDate() == null){
             throw new RuntimeException("Car with this plate already exists");
         }
     }

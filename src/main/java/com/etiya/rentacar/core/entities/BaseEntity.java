@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 
 @Data
@@ -26,4 +27,9 @@ public class BaseEntity {
 
     @Column(name = "deletedDate")
     private LocalDateTime deletedDate;
+
+    @PrePersist
+    public void onCreate() {
+        createdDate = LocalDateTime.now();
+    }
 }

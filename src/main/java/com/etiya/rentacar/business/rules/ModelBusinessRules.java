@@ -15,7 +15,7 @@ public class ModelBusinessRules {
     public void modelNameCannotBeDuplicated(String modelName) {
         Optional<Model> foundModel = modelRepository.findByNameIgnoreCase(modelName);
 
-        if (foundModel.isPresent()) {
+        if (foundModel.isPresent() && foundModel.get().getDeletedDate() == null) {
             throw new RuntimeException("This model already exists");
         }
     }

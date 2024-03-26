@@ -26,10 +26,7 @@ public class BrandManager implements BrandService {
     @Override
     public CreatedBrandResponse add(CreateBrandRequest createBrandRequest) {
         brandBusinessRules.brandNameCannotBeDuplicated(createBrandRequest.getName());
-
         Brand brand = modelMapperService.forRequest().map(createBrandRequest, Brand.class);
-        brand.setCreatedDate(LocalDateTime.now());
-
         Brand createdBrand = brandRepository.save(brand);
 
         CreatedBrandResponse createdBrandResponse = modelMapperService.forResponse()
@@ -69,8 +66,8 @@ public class BrandManager implements BrandService {
         brandBusinessRules.brandNameCannotBeDuplicated(updateBrandRequest.getName());
 
         Brand foundBrand = brandRepository.findById(id).orElse(null);
-        modelMapperService.forRequest().map(updateBrandRequest, foundBrand);
         foundBrand.setUpdatedDate(LocalDateTime.now());
+        modelMapperService.forRequest().map(updateBrandRequest, foundBrand);
         Brand updatedBrand = brandRepository.save(foundBrand);
 
         return modelMapperService.forResponse().map(updatedBrand, UpdatedBrandResponse.class);
@@ -82,8 +79,8 @@ public class BrandManager implements BrandService {
         brandBusinessRules.deletedBrand(id);
 
         Brand foundBrand = brandRepository.findById(id).orElse(null);
-        foundBrand.setDeletedDate(LocalDateTime.now());
         foundBrand.setId(id);
+        foundBrand.setDeletedDate(LocalDateTime.now());
 
         Brand deletedBrand = brandRepository.save(foundBrand);
         DeletedBrandResponse deletedBrandResponse = modelMapperService.forResponse()

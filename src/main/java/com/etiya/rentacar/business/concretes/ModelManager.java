@@ -50,7 +50,6 @@ public class ModelManager implements ModelService {
     public CreatedModelResponse add(CreateModelRequest createModelRequest) {
         modelBusinessRules.modelNameCannotBeDuplicated(createModelRequest.getName());
         Model model = modelMapperService.forRequest().map(createModelRequest, Model.class);
-        model.setCreatedDate(LocalDateTime.now());
 
         Model createdModel = modelRepository.save(model);
 

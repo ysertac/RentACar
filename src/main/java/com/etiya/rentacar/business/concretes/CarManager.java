@@ -51,7 +51,6 @@ public class CarManager implements CarService {
         carBusinessRules.carPlateCannotBeDuplicated(createCarRequest.getPlate());
 
         Car car = modelMapperService.forRequest().map(createCarRequest, Car.class);
-        car.setCreatedDate(LocalDateTime.now());
         car.setId(0);
         Car createdCar = carRepository.save(car);
 

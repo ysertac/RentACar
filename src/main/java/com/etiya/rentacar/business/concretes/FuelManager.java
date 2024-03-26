@@ -30,7 +30,6 @@ public class FuelManager implements FuelService {
         fuelBusinessRules.fuelNameCannotBeDublicated(createFuelRequest.getName());
 
         Fuel fuel = modelMapperService.forRequest().map(createFuelRequest, Fuel.class);
-        fuel.setCreatedDate(LocalDateTime.now());
         Fuel createdFuel = fuelRepository.save(fuel);
 
         CreatedFuelResponse createdFuelResponse = modelMapperService.forResponse()

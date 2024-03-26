@@ -14,7 +14,7 @@ public class FuelBusinessRules {
 
     public void fuelNameCannotBeDublicated(String fuelName) {
         Optional<Fuel> fuel = fuelRepository.findByNameIgnoreCase(fuelName);
-        if (fuel.isPresent()) {
+        if (fuel.isPresent() && fuel.get().getDeletedDate() == null) {
             throw new RuntimeException("This fuel already exists");
         }
     }
