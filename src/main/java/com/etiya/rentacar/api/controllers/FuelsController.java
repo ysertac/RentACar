@@ -37,7 +37,7 @@ public class FuelsController {
 
     @PutMapping("/{id}")
     public UpdatedFuelResponse update(@PathVariable long id,
-                                      @RequestBody UpdateFuelRequest updateFuelRequest) throws Exception {
+                                      @RequestBody UpdateFuelRequest updateFuelRequest) {
         return fuelService.update(updateFuelRequest, id);
     }
 

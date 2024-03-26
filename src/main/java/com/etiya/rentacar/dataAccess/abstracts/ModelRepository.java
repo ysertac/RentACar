@@ -4,7 +4,8 @@ import com.etiya.rentacar.entities.Model;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ModelRepository extends JpaRepository<Model, Long> {
-    List<Model> findByName(String name);
+    Optional<Model> findByNameIgnoreCase(String name);
 }

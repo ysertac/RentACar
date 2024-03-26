@@ -1,15 +1,13 @@
 package com.etiya.rentacar.business.concretes;
 
-import com.etiya.rentacar.business.abstracts.BrandService;
-import com.etiya.rentacar.business.abstracts.FuelService;
 import com.etiya.rentacar.business.abstracts.ModelService;
-import com.etiya.rentacar.business.abstracts.TransmissionService;
 import com.etiya.rentacar.business.dtos.requests.ModelRequests.CreateModelRequest;
 import com.etiya.rentacar.business.dtos.requests.ModelRequests.UpdateModelRequest;
 import com.etiya.rentacar.business.dtos.responses.ModelResponses.CreatedModelResponse;
 import com.etiya.rentacar.business.dtos.responses.ModelResponses.DeletedModelResponse;
 import com.etiya.rentacar.business.dtos.responses.ModelResponses.GetModelsResponse;
 import com.etiya.rentacar.business.dtos.responses.ModelResponses.UpdatedModelResponse;
+import com.etiya.rentacar.business.rules.ModelBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.ModelRepository;
 import com.etiya.rentacar.entities.Model;
@@ -24,18 +22,13 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ModelManager implements ModelService {
     private ModelRepository modelRepository;
+    private ModelBusinessRules modelBusinessRules;
     private ModelMapperService modelMapperService;
-    private BrandService brandService;
-    private FuelService fuelService;
-    private TransmissionService transmissionService;
-
-    @Override
-    public Model findByName(String name) {
-        return modelRepository.findByName(name).get(0);
-    }
 
     @Override
     public GetModelsResponse findById(long id) {
+        modelBusinessRules.ModelNotFound(id);
+
         Model foundModel = modelRepository.findById(id).orElse(null);
         GetModelsResponse getModelsResponse = modelMapperService.forResponse()
                 .map(foundModel, GetModelsResponse.class);
@@ -52,20 +45,23 @@ public class ModelManager implements ModelService {
 
     @Override
     public CreatedModelResponse add(CreateModelRequest createModelRequest) {
+        modelBusinessRules.ModelNameCannotBeDuplicated(createModelRequest.getName());
         Model model = modelMapperService.forRequest().map(createModelRequest, Model.class);
         model.setCreatedDate(LocalDateTime.now());
-        Model createdModel =  modelRepository.save(model);
+        Model createdModel = modelRepository.save(model);
 
         CreatedModelResponse createdModelResponse = modelMapperService.forResponse()
-                .map(createdModel,CreatedModelResponse.class);
+                .map(createdModel, CreatedModelResponse.class);
 
         return createdModelResponse;
     }
 
     @Override
-    public UpdatedModelResponse update(UpdateModelRequest updateModelRequest, long id) throws Exception {
+    public UpdatedModelResponse update(UpdateModelRequest updateModelRequest, long id) {
+        modelBusinessRules.ModelNotFound(id);
+        modelBusinessRules.ModelNameCannotBeDuplicated(updateModelRequest.getName());
+
         Model foundModel = modelRepository.findById(id).orElse(null);
-        if (foundModel != null){
         Model model = modelMapperService.forRequest().map(updateModelRequest, Model.class);
         model.setId(id);
         model.setCreatedDate(foundModel.getCreatedDate());
@@ -73,14 +69,13 @@ public class ModelManager implements ModelService {
         Model updatedModel = modelRepository.save(model);
 
         return modelMapperService.forResponse().map(updatedModel, UpdatedModelResponse.class);
-        } else {
-           throw new Exception("There is no model with this id");
-        }
     }
 
     @Override
     public DeletedModelResponse delete(long id) {
+        modelBusinessRules.ModelNotFound(id);
         Model foundModel = modelRepository.findById(id).orElse(null);
+
         DeletedModelResponse deletedModelResponse = modelMapperService.forResponse()
                 .map(foundModel, DeletedModelResponse.class);
 

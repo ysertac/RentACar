@@ -10,6 +10,6 @@ public interface CarService {
     List<GetCarsResponse> findAll();
     GetCarsResponse findById(long id);
     CreatedCarResponse add(CreateCarRequest createCarRequest);
-    UpdatedCarResponse update(UpdateCarRequest updateCarRequest, long id) throws Exception;
+    UpdatedCarResponse update(UpdateCarRequest updateCarRequest, long id);
     DeletedCarResponse delete(long id);
 }

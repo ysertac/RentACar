@@ -14,7 +14,7 @@ public interface FuelService {
 
     GetFuelsResponse findById(long id);
 
-    UpdatedFuelResponse update(UpdateFuelRequest updateFuelRequest, long id) throws Exception;
+    UpdatedFuelResponse update(UpdateFuelRequest updateFuelRequest, long id);
 
     DeletedFuelResponse delete(long id);
 }

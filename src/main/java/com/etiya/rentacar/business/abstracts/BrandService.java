@@ -7,13 +7,13 @@ import com.etiya.rentacar.business.dtos.responses.BrandResponses.*;
 import java.util.List;
 
 public interface BrandService {
-    CreatedBrandResponse add(CreateBrandRequest brand) throws Exception;
+    CreatedBrandResponse add(CreateBrandRequest brand);
 
     List<GetBrandsResponse> findAll();
 
     GetBrandsResponse findById(long id);
 
-    UpdatedBrandResponse update(UpdateBrandRequest updateBrandRequest, long id) throws Exception;
+    UpdatedBrandResponse update(UpdateBrandRequest updateBrandRequest, long id);
 
     DeletedBrandResponse delete(long id);
 }

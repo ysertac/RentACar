@@ -36,7 +36,7 @@ public class ModelsController {
 
     @PutMapping("/{id}")
     public UpdatedModelResponse update(@RequestBody UpdateModelRequest updateModelRequest,
-                                       @PathVariable long id) throws Exception {
+                                       @PathVariable long id) {
         return modelService.update(updateModelRequest, id);
     }
 

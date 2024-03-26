@@ -19,7 +19,7 @@ public class BrandsController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreatedBrandResponse add(@Valid @RequestBody CreateBrandRequest createBrandRequest) throws Exception {
+    public CreatedBrandResponse add(@Valid @RequestBody CreateBrandRequest createBrandRequest) {
         return brandService.add(createBrandRequest);
     }
 
@@ -37,7 +37,7 @@ public class BrandsController {
 
     @PutMapping("/{id}")
     public UpdatedBrandResponse update(@PathVariable long id,
-                                       @RequestBody UpdateBrandRequest updateBrandRequest) throws Exception {
+                                       @RequestBody UpdateBrandRequest updateBrandRequest) {
 
         return brandService.update(updateBrandRequest, id);
     }

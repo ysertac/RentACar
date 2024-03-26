@@ -4,6 +4,7 @@ import com.etiya.rentacar.business.abstracts.BrandService;
 import com.etiya.rentacar.business.dtos.requests.BrandRequests.CreateBrandRequest;
 import com.etiya.rentacar.business.dtos.requests.BrandRequests.UpdateBrandRequest;
 import com.etiya.rentacar.business.dtos.responses.BrandResponses.*;
+import com.etiya.rentacar.business.rules.BrandBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.BrandRepository;
 import com.etiya.rentacar.entities.Brand;
@@ -19,10 +20,13 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class BrandManager implements BrandService {
     private BrandRepository brandRepository;
+    private BrandBusinessRules brandBusinessRules;
     private ModelMapperService modelMapperService;
 
     @Override
     public CreatedBrandResponse add(CreateBrandRequest createBrandRequest) {
+        brandBusinessRules.brandNameCannotBeDuplicated(createBrandRequest.getName());
+
         Brand brand = modelMapperService.forRequest().map(createBrandRequest, Brand.class);
         brand.setCreatedDate(LocalDateTime.now());
 
@@ -45,6 +49,7 @@ public class BrandManager implements BrandService {
 
     @Override
     public GetBrandsResponse findById(long id) {
+        brandBusinessRules.brandNotFound(id);
         Optional<Brand> foundBrand = brandRepository.findById(id);
 
         GetBrandsResponse getBrandsResponse = modelMapperService.forResponse()
@@ -54,21 +59,21 @@ public class BrandManager implements BrandService {
     }
 
     @Override
-    public UpdatedBrandResponse update(UpdateBrandRequest updateBrandRequest, long id) throws Exception {
-        Brand foundBrand = brandRepository.findById(id).orElse(null);
-        if (foundBrand != null){
-            modelMapperService.forRequest().map(updateBrandRequest, foundBrand);
-            foundBrand.setUpdatedDate(LocalDateTime.now());
-            Brand updatedBrand = brandRepository.save(foundBrand);
+    public UpdatedBrandResponse update(UpdateBrandRequest updateBrandRequest, long id) {
+        brandBusinessRules.brandNotFound(id);
+        brandBusinessRules.brandNameCannotBeDuplicated(updateBrandRequest.getName());
 
-            return modelMapperService.forResponse().map(updatedBrand, UpdatedBrandResponse.class);
-        } else {
-            throw new Exception("There is no brand with this id");
-        }
+        Brand foundBrand = brandRepository.findById(id).orElse(null);
+        modelMapperService.forRequest().map(updateBrandRequest, foundBrand);
+        foundBrand.setUpdatedDate(LocalDateTime.now());
+        Brand updatedBrand = brandRepository.save(foundBrand);
+
+        return modelMapperService.forResponse().map(updatedBrand, UpdatedBrandResponse.class);
     }
 
     @Override
     public DeletedBrandResponse delete(long id) {
+        brandBusinessRules.brandNotFound(id);
         Brand foundBrand = brandRepository.findById(id).orElse(null);
         foundBrand.setDeletedDate(LocalDateTime.now());
 

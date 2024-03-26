@@ -8,10 +8,9 @@ import com.etiya.rentacar.entities.Model;
 import java.util.List;
 
 public interface ModelService {
-    Model findByName(String name);
     GetModelsResponse findById(long id);
     List<GetModelsResponse> findAll();
     CreatedModelResponse add(CreateModelRequest createModelRequest);
-    UpdatedModelResponse update(UpdateModelRequest updateModelRequest, long id) throws Exception;
+    UpdatedModelResponse update(UpdateModelRequest updateModelRequest, long id);
     DeletedModelResponse delete(long id);
 }

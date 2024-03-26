@@ -5,7 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FuelRepository extends JpaRepository<Fuel, Long> {
-    List<Fuel> findByName(String name);
+    Optional<Fuel> findByNameIgnoreCase(String name);
 }

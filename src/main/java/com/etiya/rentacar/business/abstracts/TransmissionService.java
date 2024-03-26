@@ -12,11 +12,9 @@ public interface TransmissionService {
 
     List<GetTransmissionsResponse> findAll();
 
-    Transmission findByName(String name);
-
     CreatedTransmissionResponse add(CreateTransmissionRequest createTransmissionRequest);
 
-    UpdatedTransmissionResponse update(UpdateTransmissionRequest updateTransmissionRequest, long id) throws Exception;
+    UpdatedTransmissionResponse update(UpdateTransmissionRequest updateTransmissionRequest, long id);
 
     DeletedTransmissionResponse delete(long id);
 }

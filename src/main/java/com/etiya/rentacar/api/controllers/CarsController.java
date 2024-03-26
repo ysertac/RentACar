@@ -35,8 +35,7 @@ public class CarsController {
     }
 
     @PutMapping("/{id}")
-    public UpdatedCarResponse update(@RequestBody UpdateCarRequest updateCarRequest,
-                                     @PathVariable long id) throws Exception {
+    public UpdatedCarResponse update(@RequestBody UpdateCarRequest updateCarRequest, @PathVariable long id) {
         return carService.update(updateCarRequest, id);
     }
 

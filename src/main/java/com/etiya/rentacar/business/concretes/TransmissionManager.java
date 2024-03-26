@@ -7,6 +7,7 @@ import com.etiya.rentacar.business.dtos.responses.TransmissionResponses.CreatedT
 import com.etiya.rentacar.business.dtos.responses.TransmissionResponses.DeletedTransmissionResponse;
 import com.etiya.rentacar.business.dtos.responses.TransmissionResponses.GetTransmissionsResponse;
 import com.etiya.rentacar.business.dtos.responses.TransmissionResponses.UpdatedTransmissionResponse;
+import com.etiya.rentacar.business.rules.TransmissionBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.TransmissionRepository;
 import com.etiya.rentacar.entities.Transmission;
@@ -22,10 +23,13 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class TransmissionManager implements TransmissionService {
     private TransmissionRepository transmissionRepository;
+    private TransmissionBusinessRules transmissionBusinessRules;
     private ModelMapperService modelMapperService;
 
     @Override
     public GetTransmissionsResponse findById(long id) {
+        transmissionBusinessRules.transmissionNotFound(id);
+
         Optional<Transmission> transmission = transmissionRepository.findById(id);
         GetTransmissionsResponse getTransmissionsResponse = modelMapperService.forResponse()
                 .map(transmission.get(),GetTransmissionsResponse.class);
@@ -44,12 +48,9 @@ public class TransmissionManager implements TransmissionService {
     }
 
     @Override
-    public Transmission findByName(String name) {
-        return transmissionRepository.findByName(name).get(0);
-    }
-
-    @Override
     public CreatedTransmissionResponse add(CreateTransmissionRequest createTransmissionRequest) {
+        transmissionBusinessRules.transmissionNameCannotBeDuplicated(createTransmissionRequest.getName());
+
         Transmission transmission = modelMapperService.forRequest().map(createTransmissionRequest,Transmission.class);
         transmission.setCreatedDate(LocalDateTime.now());
         Transmission createdTransmission =  transmissionRepository.save(transmission);
@@ -61,18 +62,16 @@ public class TransmissionManager implements TransmissionService {
     }
 
     @Override
-    public UpdatedTransmissionResponse update(UpdateTransmissionRequest updateTransmissionRequest, long id)
-            throws Exception {
-        Transmission foundTransmission = transmissionRepository.findById(id).orElse(null);
-        if (foundTransmission != null){
-            modelMapperService.forRequest().map(updateTransmissionRequest, foundTransmission);
-            foundTransmission.setUpdatedDate(LocalDateTime.now());
-            Transmission updatedTransmission = transmissionRepository.save(foundTransmission);
+    public UpdatedTransmissionResponse update(UpdateTransmissionRequest updateTransmissionRequest, long id) {
+        transmissionBusinessRules.transmissionNameCannotBeDuplicated(updateTransmissionRequest.getName());
+        transmissionBusinessRules.transmissionNotFound(id);
 
-            return modelMapperService.forResponse().map(updatedTransmission, UpdatedTransmissionResponse.class);
-        } else {
-            throw new Exception("There is no transmission with this id");
-        }
+        Transmission foundTransmission = transmissionRepository.findById(id).orElse(null);
+        modelMapperService.forRequest().map(updateTransmissionRequest, foundTransmission);
+        foundTransmission.setUpdatedDate(LocalDateTime.now());
+        Transmission updatedTransmission = transmissionRepository.save(foundTransmission);
+
+        return modelMapperService.forResponse().map(updatedTransmission, UpdatedTransmissionResponse.class);
     }
 
     @Override

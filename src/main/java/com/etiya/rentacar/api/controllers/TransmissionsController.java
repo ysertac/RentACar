@@ -36,8 +36,7 @@ public class TransmissionsController {
 
     @PutMapping("/{id}")
     public UpdatedTransmissionResponse update(@PathVariable long id,
-                                              @RequestBody UpdateTransmissionRequest updateTransmissionRequest)
-            throws Exception {
+                                              @RequestBody UpdateTransmissionRequest updateTransmissionRequest) {
         return transmissionService.update(updateTransmissionRequest, id);
     }
 

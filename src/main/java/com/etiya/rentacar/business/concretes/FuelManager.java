@@ -7,9 +7,11 @@ import com.etiya.rentacar.business.dtos.responses.FuelResponses.CreatedFuelRespo
 import com.etiya.rentacar.business.dtos.responses.FuelResponses.DeletedFuelResponse;
 import com.etiya.rentacar.business.dtos.responses.FuelResponses.GetFuelsResponse;
 import com.etiya.rentacar.business.dtos.responses.FuelResponses.UpdatedFuelResponse;
+import com.etiya.rentacar.business.rules.FuelBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.FuelRepository;
 import com.etiya.rentacar.entities.Fuel;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,17 +19,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class FuelManager implements FuelService {
     private FuelRepository fuelRepository;
+    private FuelBusinessRules fuelBusinessRules;
     private ModelMapperService modelMapperService;
-
-    public FuelManager(FuelRepository fuelRepository, ModelMapperService modelMapperService) {
-        this.fuelRepository = fuelRepository;
-        this.modelMapperService = modelMapperService;
-    }
 
     @Override
     public CreatedFuelResponse add(CreateFuelRequest createFuelRequest) {
+        fuelBusinessRules.fuelNameCannotBeDublicated(createFuelRequest.getName());
+
         Fuel fuel = modelMapperService.forRequest().map(createFuelRequest, Fuel.class);
         fuel.setCreatedDate(LocalDateTime.now());
         Fuel createdFuel = fuelRepository.save(fuel);
@@ -48,6 +49,8 @@ public class FuelManager implements FuelService {
 
     @Override
     public GetFuelsResponse findById(long id) {
+        fuelBusinessRules.fuelNotFound(id);
+
         Fuel foundFuel = fuelRepository.findById(id).orElse(null);
         GetFuelsResponse getFuelsResponse = modelMapperService.forResponse()
                 .map(foundFuel, GetFuelsResponse.class);
@@ -55,21 +58,24 @@ public class FuelManager implements FuelService {
     }
 
     @Override
-    public UpdatedFuelResponse update(UpdateFuelRequest updateFuelRequest, long id) throws Exception {
-        Fuel foundFuel = fuelRepository.findById(id).orElse(null);
-        if (foundFuel != null){
-            modelMapperService.forRequest().map(updateFuelRequest, foundFuel);
-            foundFuel.setUpdatedDate(LocalDateTime.now());
-            Fuel updatedFuel = fuelRepository.save(foundFuel);
+    public UpdatedFuelResponse update(UpdateFuelRequest updateFuelRequest, long id) {
+        fuelBusinessRules.fuelNotFound(id);
+        fuelBusinessRules.fuelNameCannotBeDublicated(updateFuelRequest.getName());
 
-            return modelMapperService.forResponse().map(updatedFuel, UpdatedFuelResponse.class);
-        } else {
-            throw new Exception("There is no fuel with this id");
-        }
+        Fuel foundFuel = fuelRepository.findById(id).orElse(null);
+
+        modelMapperService.forRequest().map(updateFuelRequest, foundFuel);
+        foundFuel.setUpdatedDate(LocalDateTime.now());
+        Fuel updatedFuel = fuelRepository.save(foundFuel);
+
+        return modelMapperService.forResponse().map(updatedFuel, UpdatedFuelResponse.class);
+
     }
 
     @Override
     public DeletedFuelResponse delete(long id) {
+        fuelBusinessRules.fuelNotFound(id);
+
         Fuel foundFuel = fuelRepository.findById(id).orElse(null);
         foundFuel.setDeletedDate(LocalDateTime.now());
         DeletedFuelResponse deletedFuelResponse = modelMapperService.forResponse()
