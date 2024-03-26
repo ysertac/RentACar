@@ -42,15 +42,17 @@ public class FuelManager implements FuelService {
     @Override
     public List<GetFuelsResponse> findAll() {
         List<Fuel> allFuels = fuelRepository.findAll();
-        List<GetFuelsResponse> getFuelsResponses = allFuels.stream().map(fuel -> modelMapperService.forResponse()
-                .map(fuel, GetFuelsResponse.class)).collect(Collectors.toList());
+        List<GetFuelsResponse> getFuelsResponses = allFuels.stream()
+                .filter(fuel -> fuel.getDeletedDate() == null)
+                .map(fuel ->
+                        modelMapperService.forResponse().map(fuel, GetFuelsResponse.class)).collect(Collectors.toList());
         return getFuelsResponses;
     }
 
     @Override
     public GetFuelsResponse findById(long id) {
         fuelBusinessRules.fuelNotFound(id);
-
+        fuelBusinessRules.deletedFuel(id);
         Fuel foundFuel = fuelRepository.findById(id).orElse(null);
         GetFuelsResponse getFuelsResponse = modelMapperService.forResponse()
                 .map(foundFuel, GetFuelsResponse.class);
@@ -61,6 +63,7 @@ public class FuelManager implements FuelService {
     public UpdatedFuelResponse update(UpdateFuelRequest updateFuelRequest, long id) {
         fuelBusinessRules.fuelNotFound(id);
         fuelBusinessRules.fuelNameCannotBeDublicated(updateFuelRequest.getName());
+        fuelBusinessRules.deletedFuel(id);
 
         Fuel foundFuel = fuelRepository.findById(id).orElse(null);
 
@@ -75,12 +78,12 @@ public class FuelManager implements FuelService {
     @Override
     public DeletedFuelResponse delete(long id) {
         fuelBusinessRules.fuelNotFound(id);
-
         Fuel foundFuel = fuelRepository.findById(id).orElse(null);
+        foundFuel.setId(id);
         foundFuel.setDeletedDate(LocalDateTime.now());
+        Fuel deletedFuel = fuelRepository.save(foundFuel);
         DeletedFuelResponse deletedFuelResponse = modelMapperService.forResponse()
-                .map(foundFuel, DeletedFuelResponse.class);
-        fuelRepository.delete(foundFuel);
+                .map(deletedFuel, DeletedFuelResponse.class);
         return deletedFuelResponse;
     }
 }

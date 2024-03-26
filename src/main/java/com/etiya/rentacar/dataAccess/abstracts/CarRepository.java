@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface CarRepository extends JpaRepository<Car, Long> {
-    @Query(value = "SELECT * FROM CARS WHERE plate=:plate", nativeQuery = true)
+    @Query(value = "SELECT * FROM CARS WHERE LOWER(plate)=LOWER(:plate)", nativeQuery = true)
     Optional<Car> findByPlate(String plate);
 }

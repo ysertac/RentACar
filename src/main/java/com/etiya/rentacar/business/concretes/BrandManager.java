@@ -41,8 +41,10 @@ public class BrandManager implements BrandService {
     @Override
     public List<GetBrandsResponse> findAll() {
         List<Brand> brands = brandRepository.findAll();
-        List<GetBrandsResponse> allBrands = brands.stream().map(brand ->
-                modelMapperService.forResponse().map(brand, GetBrandsResponse.class)).collect(Collectors.toList());
+        List<GetBrandsResponse> allBrands = brands.stream()
+                .filter(brand -> brand.getDeletedDate() == null)
+                .map(brand ->
+                        modelMapperService.forResponse().map(brand, GetBrandsResponse.class)).collect(Collectors.toList());
 
         return allBrands;
     }
@@ -50,6 +52,7 @@ public class BrandManager implements BrandService {
     @Override
     public GetBrandsResponse findById(long id) {
         brandBusinessRules.brandNotFound(id);
+        brandBusinessRules.deletedBrand(id);
         Optional<Brand> foundBrand = brandRepository.findById(id);
 
         GetBrandsResponse getBrandsResponse = modelMapperService.forResponse()
@@ -61,6 +64,7 @@ public class BrandManager implements BrandService {
     @Override
     public UpdatedBrandResponse update(UpdateBrandRequest updateBrandRequest, long id) {
         brandBusinessRules.brandNotFound(id);
+        brandBusinessRules.deletedBrand(id);
         brandBusinessRules.brandNameCannotBeDuplicated(updateBrandRequest.getName());
 
         Brand foundBrand = brandRepository.findById(id).orElse(null);
@@ -76,11 +80,12 @@ public class BrandManager implements BrandService {
         brandBusinessRules.brandNotFound(id);
         Brand foundBrand = brandRepository.findById(id).orElse(null);
         foundBrand.setDeletedDate(LocalDateTime.now());
+        foundBrand.setId(id);
 
+        Brand deletedBrand = brandRepository.save(foundBrand);
         DeletedBrandResponse deletedBrandResponse = modelMapperService.forResponse()
-                .map(foundBrand, DeletedBrandResponse.class);
+                .map(deletedBrand, DeletedBrandResponse.class);
 
-        brandRepository.delete(foundBrand);
         return deletedBrandResponse;
     }
 }

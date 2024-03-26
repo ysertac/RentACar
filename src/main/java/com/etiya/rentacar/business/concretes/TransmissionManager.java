@@ -29,6 +29,7 @@ public class TransmissionManager implements TransmissionService {
     @Override
     public GetTransmissionsResponse findById(long id) {
         transmissionBusinessRules.transmissionNotFound(id);
+        transmissionBusinessRules.transmissionDeleted(id);
 
         Optional<Transmission> transmission = transmissionRepository.findById(id);
         GetTransmissionsResponse getTransmissionsResponse = modelMapperService.forResponse()
@@ -41,8 +42,9 @@ public class TransmissionManager implements TransmissionService {
         List<Transmission> transmissions = transmissionRepository.findAll();
 
         List<GetTransmissionsResponse> getTransmissionsResponse = transmissions.stream()
-                .map(transmission -> modelMapperService.forResponse()
-                        .map(transmission, GetTransmissionsResponse.class)).collect(Collectors.toList());
+                .filter(transmission -> transmission.getDeletedDate() == null)
+                .map(transmission ->
+                        modelMapperService.forResponse().map(transmission, GetTransmissionsResponse.class)).collect(Collectors.toList());
 
         return getTransmissionsResponse;
     }
@@ -65,6 +67,7 @@ public class TransmissionManager implements TransmissionService {
     public UpdatedTransmissionResponse update(UpdateTransmissionRequest updateTransmissionRequest, long id) {
         transmissionBusinessRules.transmissionNameCannotBeDuplicated(updateTransmissionRequest.getName());
         transmissionBusinessRules.transmissionNotFound(id);
+        transmissionBusinessRules.transmissionDeleted(id);
 
         Transmission foundTransmission = transmissionRepository.findById(id).orElse(null);
         modelMapperService.forRequest().map(updateTransmissionRequest, foundTransmission);
@@ -76,13 +79,16 @@ public class TransmissionManager implements TransmissionService {
 
     @Override
     public DeletedTransmissionResponse delete(long id) {
+        transmissionBusinessRules.transmissionNotFound(id);
+
         Transmission foundTransmission = transmissionRepository.findById(id).orElse(null);
+        foundTransmission.setId(id);
         foundTransmission.setDeletedDate(LocalDateTime.now());
+        Transmission deletedTransmission = transmissionRepository.save(foundTransmission);
 
         DeletedTransmissionResponse deletedTransmissionResponse = modelMapperService.forResponse()
-                .map(foundTransmission, DeletedTransmissionResponse.class);
+                .map(deletedTransmission, DeletedTransmissionResponse.class);
 
-        transmissionRepository.delete(foundTransmission);
         return deletedTransmissionResponse;
     }
 }

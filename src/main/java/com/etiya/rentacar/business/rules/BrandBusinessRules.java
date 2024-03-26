@@ -26,4 +26,12 @@ public class BrandBusinessRules {
             throw new RuntimeException("There is no brand with this id");
         }
     }
+
+    public void deletedBrand(long id) {
+        Brand foundBrand = brandRepository.findById(id).orElse(null);
+
+        if (foundBrand.getDeletedDate() != null) {
+            throw new RuntimeException("This brand is deleted");
+        }
+    }
 }

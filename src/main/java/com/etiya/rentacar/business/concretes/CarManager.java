@@ -1,7 +1,6 @@
 package com.etiya.rentacar.business.concretes;
 
 import com.etiya.rentacar.business.abstracts.CarService;
-import com.etiya.rentacar.business.abstracts.ModelService;
 import com.etiya.rentacar.business.dtos.requests.CarRequests.CreateCarRequest;
 import com.etiya.rentacar.business.dtos.requests.CarRequests.UpdateCarRequest;
 import com.etiya.rentacar.business.dtos.responses.CarResponses.CreatedCarResponse;
@@ -25,19 +24,22 @@ public class CarManager implements CarService {
     private CarRepository carRepository;
     private CarBusinessRules carBusinessRules;
     private ModelMapperService modelMapperService;
-    private ModelService modelService;
 
     @Override
     public List<GetCarsResponse> findAll() {
         List<Car> cars = carRepository.findAll();
-        List<GetCarsResponse> getCarsResponses  = cars.stream().map(car ->
-                modelMapperService.forResponse()
-                        .map(car, GetCarsResponse.class)).collect(Collectors.toList());
+        List<GetCarsResponse> getCarsResponses = cars.stream()
+                .filter(car -> car.getDeletedDate() == null)
+                .map(car ->
+                        modelMapperService.forResponse().map(car, GetCarsResponse.class)).collect(Collectors.toList());
         return getCarsResponses;
     }
 
     @Override
     public GetCarsResponse findById(long id) {
+        carBusinessRules.carNotFound(id);
+        carBusinessRules.deletedCar(id);
+
         Car foundCar = carRepository.findById(id).orElse(null);
         GetCarsResponse getCarsResponse = modelMapperService.forResponse()
                 .map(foundCar, GetCarsResponse.class);
@@ -49,10 +51,11 @@ public class CarManager implements CarService {
         carBusinessRules.carPlateCannotBeDuplicated(createCarRequest.getPlate());
         Car car = modelMapperService.forRequest().map(createCarRequest, Car.class);
         car.setCreatedDate(LocalDateTime.now());
-        Car createdCar =  carRepository.save(car);
+        car.setId(0);
+        Car createdCar = carRepository.save(car);
 
         CreatedCarResponse createdCarResponse = modelMapperService.forResponse()
-                .map(createdCar,CreatedCarResponse.class);
+                .map(createdCar, CreatedCarResponse.class);
 
         return createdCarResponse;
     }
@@ -61,6 +64,7 @@ public class CarManager implements CarService {
     public UpdatedCarResponse update(UpdateCarRequest updateCarRequest, long id) {
         carBusinessRules.carNotFound(id);
         carBusinessRules.carPlateCannotBeDuplicated(updateCarRequest.getPlate());
+        carBusinessRules.deletedCar(id);
 
         Car foundCar = carRepository.findById(id).orElse(null);
         Car car = modelMapperService.forRequest().map(updateCarRequest, Car.class);
@@ -68,6 +72,7 @@ public class CarManager implements CarService {
         car.setUpdatedDate(LocalDateTime.now());
         car.setCreatedDate(foundCar.getCreatedDate());
         Car updatedCar = carRepository.save(car);
+
         UpdatedCarResponse updatedCarResponse = modelMapperService.forResponse()
                 .map(updatedCar, UpdatedCarResponse.class);
         return updatedCarResponse;
@@ -77,12 +82,15 @@ public class CarManager implements CarService {
     @Override
     public DeletedCarResponse delete(long id) {
         carBusinessRules.carNotFound(id);
+
         Car foundCar = carRepository.findById(id).orElse(null);
+        foundCar.setId(id);
+        foundCar.setDeletedDate(LocalDateTime.now());
+        Car deletedCar = carRepository.save(foundCar);
 
         DeletedCarResponse deletedCarResponse = modelMapperService.forResponse()
-                .map(foundCar, DeletedCarResponse.class);
+                .map(deletedCar, DeletedCarResponse.class);
 
-        carRepository.delete(foundCar);
         return deletedCarResponse;
     }
 }

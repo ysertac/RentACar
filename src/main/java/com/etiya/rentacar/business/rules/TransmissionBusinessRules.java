@@ -27,4 +27,12 @@ public class TransmissionBusinessRules {
             throw new RuntimeException("This transmission already exists");
         }
     }
+
+    public void transmissionDeleted(long id) {
+        Transmission foundTransmission = transmissionRepository.findById(id).orElse(null);
+
+        if (foundTransmission.getDeletedDate() != null) {
+            throw new RuntimeException("This transmission is deleted");
+        }
+    }
 }

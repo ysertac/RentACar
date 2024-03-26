@@ -26,4 +26,12 @@ public class FuelBusinessRules {
             throw new RuntimeException("There is no fuel with this id");
         }
     }
+
+    public void deletedFuel(long fuelId) {
+        Fuel foundFuel = fuelRepository.findById(fuelId).orElse(null);
+
+        if (foundFuel.getDeletedDate() != null) {
+            throw new RuntimeException("This fuel is deleted");
+        }
+    }
 }

@@ -12,7 +12,7 @@ import java.util.Optional;
 public class ModelBusinessRules {
     private ModelRepository modelRepository;
 
-    public void ModelNameCannotBeDuplicated(String modelName) {
+    public void modelNameCannotBeDuplicated(String modelName) {
         Optional<Model> foundModel = modelRepository.findByNameIgnoreCase(modelName);
 
         if (foundModel.isPresent()) {
@@ -20,11 +20,19 @@ public class ModelBusinessRules {
         }
     }
 
-    public void ModelNotFound(long id) {
+    public void modelNotFound(long id) {
         Optional<Model> foundModel = modelRepository.findById(id);
 
         if (!foundModel.isPresent()) {
             throw new RuntimeException("There is no model with this id");
+        }
+    }
+
+    public void deletedModel(long id) {
+        Model foundModel = modelRepository.findById(id).orElse(null);
+
+        if (foundModel.getDeletedDate() != null) {
+            throw new RuntimeException("This model is deleted!");
         }
     }
 }

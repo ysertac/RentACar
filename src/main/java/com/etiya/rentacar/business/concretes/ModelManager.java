@@ -27,7 +27,8 @@ public class ModelManager implements ModelService {
 
     @Override
     public GetModelsResponse findById(long id) {
-        modelBusinessRules.ModelNotFound(id);
+        modelBusinessRules.modelNotFound(id);
+        modelBusinessRules.deletedModel(id);
 
         Model foundModel = modelRepository.findById(id).orElse(null);
         GetModelsResponse getModelsResponse = modelMapperService.forResponse()
@@ -38,16 +39,19 @@ public class ModelManager implements ModelService {
     @Override
     public List<GetModelsResponse> findAll() {
         List<Model> allModels = modelRepository.findAll();
-        List<GetModelsResponse> getModelsResponse = allModels.stream().map(model -> modelMapperService.forResponse()
-                .map(model, GetModelsResponse.class)).collect(Collectors.toList());
+        List<GetModelsResponse> getModelsResponse = allModels.stream()
+                .filter(model -> model.getDeletedDate() == null)
+                .map(model ->
+                        modelMapperService.forResponse().map(model, GetModelsResponse.class)).collect(Collectors.toList());
         return getModelsResponse;
     }
 
     @Override
     public CreatedModelResponse add(CreateModelRequest createModelRequest) {
-        modelBusinessRules.ModelNameCannotBeDuplicated(createModelRequest.getName());
+        modelBusinessRules.modelNameCannotBeDuplicated(createModelRequest.getName());
         Model model = modelMapperService.forRequest().map(createModelRequest, Model.class);
         model.setCreatedDate(LocalDateTime.now());
+
         Model createdModel = modelRepository.save(model);
 
         CreatedModelResponse createdModelResponse = modelMapperService.forResponse()
@@ -58,8 +62,9 @@ public class ModelManager implements ModelService {
 
     @Override
     public UpdatedModelResponse update(UpdateModelRequest updateModelRequest, long id) {
-        modelBusinessRules.ModelNotFound(id);
-        modelBusinessRules.ModelNameCannotBeDuplicated(updateModelRequest.getName());
+        modelBusinessRules.modelNotFound(id);
+        modelBusinessRules.modelNameCannotBeDuplicated(updateModelRequest.getName());
+        modelBusinessRules.deletedModel(id);
 
         Model foundModel = modelRepository.findById(id).orElse(null);
         Model model = modelMapperService.forRequest().map(updateModelRequest, Model.class);
@@ -73,13 +78,15 @@ public class ModelManager implements ModelService {
 
     @Override
     public DeletedModelResponse delete(long id) {
-        modelBusinessRules.ModelNotFound(id);
+        modelBusinessRules.modelNotFound(id);
+
         Model foundModel = modelRepository.findById(id).orElse(null);
-
+        foundModel.setId(id);
+        foundModel.setDeletedDate(LocalDateTime.now());
+        Model deletedModel = modelRepository.save(foundModel);
         DeletedModelResponse deletedModelResponse = modelMapperService.forResponse()
-                .map(foundModel, DeletedModelResponse.class);
+                .map(deletedModel, DeletedModelResponse.class);
 
-        modelRepository.delete(foundModel);
         return deletedModelResponse;
     }
 }

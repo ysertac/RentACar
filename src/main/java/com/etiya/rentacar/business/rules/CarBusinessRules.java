@@ -27,4 +27,12 @@ public class CarBusinessRules {
             throw new RuntimeException("There is no car with this id");
         }
     }
+
+    public void deletedCar(long id) {
+        Car foundCar = carRepository.findById(id).orElse(null);
+
+        if (foundCar.getDeletedDate() != null) {
+            throw new RuntimeException("This car is deleted");
+        }
+    }
 }
