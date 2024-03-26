@@ -80,6 +80,7 @@ public class TransmissionManager implements TransmissionService {
     @Override
     public DeletedTransmissionResponse delete(long id) {
         transmissionBusinessRules.transmissionNotFound(id);
+        transmissionBusinessRules.transmissionDeleted(id);
 
         Transmission foundTransmission = transmissionRepository.findById(id).orElse(null);
         foundTransmission.setId(id);

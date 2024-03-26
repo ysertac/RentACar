@@ -53,6 +53,7 @@ public class FuelManager implements FuelService {
     public GetFuelsResponse findById(long id) {
         fuelBusinessRules.fuelNotFound(id);
         fuelBusinessRules.deletedFuel(id);
+
         Fuel foundFuel = fuelRepository.findById(id).orElse(null);
         GetFuelsResponse getFuelsResponse = modelMapperService.forResponse()
                 .map(foundFuel, GetFuelsResponse.class);
@@ -78,6 +79,8 @@ public class FuelManager implements FuelService {
     @Override
     public DeletedFuelResponse delete(long id) {
         fuelBusinessRules.fuelNotFound(id);
+        fuelBusinessRules.deletedFuel(id);
+
         Fuel foundFuel = fuelRepository.findById(id).orElse(null);
         foundFuel.setId(id);
         foundFuel.setDeletedDate(LocalDateTime.now());

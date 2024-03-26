@@ -53,6 +53,7 @@ public class BrandManager implements BrandService {
     public GetBrandsResponse findById(long id) {
         brandBusinessRules.brandNotFound(id);
         brandBusinessRules.deletedBrand(id);
+
         Optional<Brand> foundBrand = brandRepository.findById(id);
 
         GetBrandsResponse getBrandsResponse = modelMapperService.forResponse()
@@ -78,6 +79,8 @@ public class BrandManager implements BrandService {
     @Override
     public DeletedBrandResponse delete(long id) {
         brandBusinessRules.brandNotFound(id);
+        brandBusinessRules.deletedBrand(id);
+
         Brand foundBrand = brandRepository.findById(id).orElse(null);
         foundBrand.setDeletedDate(LocalDateTime.now());
         foundBrand.setId(id);

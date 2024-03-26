@@ -79,6 +79,7 @@ public class ModelManager implements ModelService {
     @Override
     public DeletedModelResponse delete(long id) {
         modelBusinessRules.modelNotFound(id);
+        modelBusinessRules.deletedModel(id);
 
         Model foundModel = modelRepository.findById(id).orElse(null);
         foundModel.setId(id);

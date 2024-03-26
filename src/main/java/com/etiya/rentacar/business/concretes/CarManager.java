@@ -49,6 +49,7 @@ public class CarManager implements CarService {
     @Override
     public CreatedCarResponse add(CreateCarRequest createCarRequest) {
         carBusinessRules.carPlateCannotBeDuplicated(createCarRequest.getPlate());
+
         Car car = modelMapperService.forRequest().map(createCarRequest, Car.class);
         car.setCreatedDate(LocalDateTime.now());
         car.setId(0);
@@ -82,6 +83,7 @@ public class CarManager implements CarService {
     @Override
     public DeletedCarResponse delete(long id) {
         carBusinessRules.carNotFound(id);
+        carBusinessRules.deletedCar(id);
 
         Car foundCar = carRepository.findById(id).orElse(null);
         foundCar.setId(id);
