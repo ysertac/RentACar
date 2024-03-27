@@ -1,5 +1,6 @@
 package com.etiya.rentacar.business.rules;
 
+import com.etiya.rentacar.core.exceptions.types.BusinessException;
 import com.etiya.rentacar.dataAccess.abstracts.BrandRepository;
 import com.etiya.rentacar.entities.Brand;
 import lombok.AllArgsConstructor;
@@ -11,11 +12,12 @@ import java.util.Optional;
 @AllArgsConstructor
 public class BrandBusinessRules {
     private BrandRepository brandRepository;
+
     public void brandNameCannotBeDuplicated(String brandName) {
         Optional<Brand> foundBrand = brandRepository.findByNameIgnoreCase(brandName);
 
         if (foundBrand.isPresent() && foundBrand.get().getDeletedDate() == null) {
-            throw new RuntimeException("This brand already exists");
+            throw new BusinessException("This brand already exists");
         }
     }
 
@@ -23,7 +25,7 @@ public class BrandBusinessRules {
         Optional<Brand> foundBrand = brandRepository.findById(brandId);
 
         if (!foundBrand.isPresent()) {
-            throw new RuntimeException("There is no brand with this id");
+            throw new BusinessException("There is no brand with this id");
         }
     }
 
@@ -31,7 +33,7 @@ public class BrandBusinessRules {
         Brand foundBrand = brandRepository.findById(id).orElse(null);
 
         if (foundBrand.getDeletedDate() != null) {
-            throw new RuntimeException("This brand is deleted");
+            throw new BusinessException("This brand is deleted");
         }
     }
 }

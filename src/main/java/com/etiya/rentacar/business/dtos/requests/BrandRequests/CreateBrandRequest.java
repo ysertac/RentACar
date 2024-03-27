@@ -1,5 +1,6 @@
 package com.etiya.rentacar.business.dtos.requests.BrandRequests;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateBrandRequest {
-    @NotNull
+    @NotEmpty(message = "Brand name cannot be empty")
     @Size(min = 2, max = 30)
     private String name;
 }
