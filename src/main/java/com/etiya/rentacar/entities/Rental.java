@@ -20,7 +20,21 @@ public class Rental extends BaseEntity {
     @Column(name = "endDate")
     private LocalDateTime endDate;
 
+    @Column(name = "startKilometer")
+    private long startKilometer;
+
+    @Column(name = "returnKilometer")
+    private long endKilometer;
+
     @ManyToOne
     @JoinColumn(name = "carId")
     private Car car;
+
+    @ManyToOne
+    @JoinColumn(name = "corporateCustomerId")
+    private CorparateCustomer corporateCustomer;
+
+    @ManyToOne
+    @JoinColumn(name = "individualCustomerId")
+    private IndividualCustomer individualCustomer;
 }

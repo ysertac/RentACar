@@ -20,4 +20,7 @@ public class RentalBranch extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "cityId")
     private City city;
+
+    @OneToMany(mappedBy = "rentalBranch")
+    private List<Car> cars;
 }
