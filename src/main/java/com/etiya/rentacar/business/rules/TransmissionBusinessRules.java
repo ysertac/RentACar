@@ -1,5 +1,6 @@
 package com.etiya.rentacar.business.rules;
 
+import com.etiya.rentacar.core.exceptions.types.BusinessException;
 import com.etiya.rentacar.dataAccess.abstracts.TransmissionRepository;
 import com.etiya.rentacar.entities.Transmission;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ public class TransmissionBusinessRules {
         Optional<Transmission> foundTransmission = transmissionRepository.findById(transmissionId);
 
         if (!foundTransmission.isPresent()) {
-            throw new RuntimeException("There is no transmission with this id");
+            throw new BusinessException("There is no transmission with this id");
         }
     }
 
@@ -24,7 +25,7 @@ public class TransmissionBusinessRules {
         Optional<Transmission> transmission = transmissionRepository.findByNameIgnoreCase(name);
 
         if (transmission.isPresent() && transmission.get().getDeletedDate() == null){
-            throw new RuntimeException("This transmission already exists");
+            throw new BusinessException("This transmission already exists");
         }
     }
 
@@ -32,7 +33,7 @@ public class TransmissionBusinessRules {
         Transmission foundTransmission = transmissionRepository.findById(id).orElse(null);
 
         if (foundTransmission.getDeletedDate() != null) {
-            throw new RuntimeException("This transmission is deleted");
+            throw new BusinessException("This transmission is deleted");
         }
     }
 }

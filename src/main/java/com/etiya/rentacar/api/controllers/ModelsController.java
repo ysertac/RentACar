@@ -4,6 +4,7 @@ import com.etiya.rentacar.business.abstracts.ModelService;
 import com.etiya.rentacar.business.dtos.requests.ModelRequests.CreateModelRequest;
 import com.etiya.rentacar.business.dtos.requests.ModelRequests.UpdateModelRequest;
 import com.etiya.rentacar.business.dtos.responses.ModelResponses.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,30 +18,32 @@ public class ModelsController {
     private ModelService modelService;
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public GetModelsResponse findById(@PathVariable long id) {
         return modelService.findById(id);
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public List<GetModelsResponse> findAll() {
         return modelService.findAll();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreatedModelResponse add(@RequestBody CreateModelRequest createModelRequest) {
+    public CreatedModelResponse add(@Valid @RequestBody CreateModelRequest createModelRequest) {
         return modelService.add(createModelRequest);
     }
 
     @PutMapping("/{id}")
-    public UpdatedModelResponse update(@RequestBody UpdateModelRequest updateModelRequest,
+    @ResponseStatus(HttpStatus.OK)
+    public UpdatedModelResponse update(@Valid @RequestBody UpdateModelRequest updateModelRequest,
                                        @PathVariable long id) {
         return modelService.update(updateModelRequest, id);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public DeletedModelResponse delete(@PathVariable long id) {
         return modelService.delete(id);
     }

@@ -24,25 +24,27 @@ public class BrandsController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public List<GetBrandsResponse> findAll() {
         return brandService.findAll();
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public GetBrandsResponse findById(@PathVariable long id) {
         return brandService.findById(id);
     }
 
     @PutMapping("/{id}")
-    public UpdatedBrandResponse update(@PathVariable long id,
+    @ResponseStatus(HttpStatus.OK)
+    public UpdatedBrandResponse update(@Valid @PathVariable long id,
                                        @RequestBody UpdateBrandRequest updateBrandRequest) {
 
         return brandService.update(updateBrandRequest, id);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public DeletedBrandResponse delete(@PathVariable long id) {
         return brandService.delete(id);
     }

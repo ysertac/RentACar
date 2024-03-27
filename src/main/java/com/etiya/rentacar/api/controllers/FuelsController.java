@@ -24,24 +24,26 @@ public class FuelsController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public List<GetFuelsResponse> findAll() {
         return fuelService.findAll();
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public GetFuelsResponse findById(@PathVariable long id) {
         return fuelService.findById(id);
     }
 
     @PutMapping("/{id}")
-    public UpdatedFuelResponse update(@PathVariable long id,
+    @ResponseStatus(HttpStatus.OK)
+    public UpdatedFuelResponse update(@Valid @PathVariable long id,
                                       @RequestBody UpdateFuelRequest updateFuelRequest) {
         return fuelService.update(updateFuelRequest, id);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public DeletedFuelResponse delete(@PathVariable long id) {
         return fuelService.delete(id);
     }

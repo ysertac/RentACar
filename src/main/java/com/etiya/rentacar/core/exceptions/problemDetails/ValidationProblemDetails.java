@@ -15,6 +15,6 @@ public class ValidationProblemDetails extends ProblemDetails {
         setStatus(HttpStatus.BAD_REQUEST.toString());
     }
 
-    private Map<String, List<String>> errors;
+    private List<Map<String, String>> errors;
 
 }

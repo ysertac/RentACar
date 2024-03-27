@@ -1,5 +1,6 @@
 package com.etiya.rentacar.business.rules;
 
+import com.etiya.rentacar.core.exceptions.types.BusinessException;
 import com.etiya.rentacar.dataAccess.abstracts.CarRepository;
 import com.etiya.rentacar.entities.Car;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ public class CarBusinessRules {
         Optional<Car> car = carRepository.findByPlate(plate);
 
         if (car.isPresent() && car.get().getDeletedDate() == null){
-            throw new RuntimeException("Car with this plate already exists");
+            throw new BusinessException("Car with this plate already exists");
         }
     }
 
@@ -24,7 +25,7 @@ public class CarBusinessRules {
         Optional<Car> foundCar = carRepository.findById(id);
 
         if (!foundCar.isPresent()) {
-            throw new RuntimeException("There is no car with this id");
+            throw new BusinessException("There is no car with this id");
         }
     }
 
@@ -32,7 +33,7 @@ public class CarBusinessRules {
         Car foundCar = carRepository.findById(id).orElse(null);
 
         if (foundCar.getDeletedDate() != null) {
-            throw new RuntimeException("This car is deleted");
+            throw new BusinessException("This car is deleted");
         }
     }
 }
