@@ -19,6 +19,9 @@ public class UpdateCarRequest {
     @Max(3)
     private int state;
 
+    @NotNull
+    private int kilometer;
+
     @NotBlank
     @NotEmpty
     @Size(min = 7, max = 9)

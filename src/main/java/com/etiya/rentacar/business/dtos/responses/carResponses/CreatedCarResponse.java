@@ -16,6 +16,7 @@ public class CreatedCarResponse {
     private LocalDateTime deletedDate;
     private int modelYear;
     private int state;
+    private int kilometer;
     private String plate;
     private double dailyPrice;
     private String modelId;

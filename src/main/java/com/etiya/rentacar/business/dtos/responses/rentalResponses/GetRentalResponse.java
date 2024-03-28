@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreatedRentalResponse {
+public class GetRentalResponse {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private long startKilometer;

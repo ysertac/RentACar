@@ -26,6 +26,9 @@ public class Car extends BaseEntity {
     @Column(name = "price")
     private double dailyPrice;
 
+    @Column(name = "kilometer")
+    private int kilometer;
+
     @ManyToOne
     @JoinColumn(name = "modelId")
     private Model model;
