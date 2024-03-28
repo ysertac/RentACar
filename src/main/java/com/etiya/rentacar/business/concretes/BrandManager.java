@@ -1,9 +1,9 @@
 package com.etiya.rentacar.business.concretes;
 
 import com.etiya.rentacar.business.abstracts.BrandService;
-import com.etiya.rentacar.business.dtos.requests.BrandRequests.CreateBrandRequest;
-import com.etiya.rentacar.business.dtos.requests.BrandRequests.UpdateBrandRequest;
-import com.etiya.rentacar.business.dtos.responses.BrandResponses.*;
+import com.etiya.rentacar.business.dtos.requests.brandRequests.CreateBrandRequest;
+import com.etiya.rentacar.business.dtos.requests.brandRequests.UpdateBrandRequest;
+import com.etiya.rentacar.business.dtos.responses.brandResponses.*;
 import com.etiya.rentacar.business.rules.BrandBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.BrandRepository;

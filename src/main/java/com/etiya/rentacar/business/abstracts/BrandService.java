@@ -1,8 +1,8 @@
 package com.etiya.rentacar.business.abstracts;
 
-import com.etiya.rentacar.business.dtos.requests.BrandRequests.CreateBrandRequest;
-import com.etiya.rentacar.business.dtos.requests.BrandRequests.UpdateBrandRequest;
-import com.etiya.rentacar.business.dtos.responses.BrandResponses.*;
+import com.etiya.rentacar.business.dtos.requests.brandRequests.CreateBrandRequest;
+import com.etiya.rentacar.business.dtos.requests.brandRequests.UpdateBrandRequest;
+import com.etiya.rentacar.business.dtos.responses.brandResponses.*;
 
 import java.util.List;
 

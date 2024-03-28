@@ -1,9 +1,9 @@
 package com.etiya.rentacar.api.controllers;
 
 import com.etiya.rentacar.business.abstracts.CarService;
-import com.etiya.rentacar.business.dtos.requests.CarRequests.CreateCarRequest;
-import com.etiya.rentacar.business.dtos.requests.CarRequests.UpdateCarRequest;
-import com.etiya.rentacar.business.dtos.responses.CarResponses.*;
+import com.etiya.rentacar.business.dtos.requests.carRequests.CreateCarRequest;
+import com.etiya.rentacar.business.dtos.requests.carRequests.UpdateCarRequest;
+import com.etiya.rentacar.business.dtos.responses.carResponses.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

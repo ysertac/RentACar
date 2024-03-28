@@ -1,12 +1,12 @@
 package com.etiya.rentacar.business.concretes;
 
 import com.etiya.rentacar.business.abstracts.CarService;
-import com.etiya.rentacar.business.dtos.requests.CarRequests.CreateCarRequest;
-import com.etiya.rentacar.business.dtos.requests.CarRequests.UpdateCarRequest;
-import com.etiya.rentacar.business.dtos.responses.CarResponses.CreatedCarResponse;
-import com.etiya.rentacar.business.dtos.responses.CarResponses.DeletedCarResponse;
-import com.etiya.rentacar.business.dtos.responses.CarResponses.GetCarsResponse;
-import com.etiya.rentacar.business.dtos.responses.CarResponses.UpdatedCarResponse;
+import com.etiya.rentacar.business.dtos.requests.carRequests.CreateCarRequest;
+import com.etiya.rentacar.business.dtos.requests.carRequests.UpdateCarRequest;
+import com.etiya.rentacar.business.dtos.responses.carResponses.CreatedCarResponse;
+import com.etiya.rentacar.business.dtos.responses.carResponses.DeletedCarResponse;
+import com.etiya.rentacar.business.dtos.responses.carResponses.GetCarsResponse;
+import com.etiya.rentacar.business.dtos.responses.carResponses.UpdatedCarResponse;
 import com.etiya.rentacar.business.rules.CarBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.CarRepository;

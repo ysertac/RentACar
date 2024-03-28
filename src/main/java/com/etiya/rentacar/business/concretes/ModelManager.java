@@ -1,12 +1,12 @@
 package com.etiya.rentacar.business.concretes;
 
 import com.etiya.rentacar.business.abstracts.ModelService;
-import com.etiya.rentacar.business.dtos.requests.ModelRequests.CreateModelRequest;
-import com.etiya.rentacar.business.dtos.requests.ModelRequests.UpdateModelRequest;
-import com.etiya.rentacar.business.dtos.responses.ModelResponses.CreatedModelResponse;
-import com.etiya.rentacar.business.dtos.responses.ModelResponses.DeletedModelResponse;
-import com.etiya.rentacar.business.dtos.responses.ModelResponses.GetModelsResponse;
-import com.etiya.rentacar.business.dtos.responses.ModelResponses.UpdatedModelResponse;
+import com.etiya.rentacar.business.dtos.requests.modelRequests.CreateModelRequest;
+import com.etiya.rentacar.business.dtos.requests.modelRequests.UpdateModelRequest;
+import com.etiya.rentacar.business.dtos.responses.modelResponses.CreatedModelResponse;
+import com.etiya.rentacar.business.dtos.responses.modelResponses.DeletedModelResponse;
+import com.etiya.rentacar.business.dtos.responses.modelResponses.GetModelsResponse;
+import com.etiya.rentacar.business.dtos.responses.modelResponses.UpdatedModelResponse;
 import com.etiya.rentacar.business.rules.ModelBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.ModelRepository;

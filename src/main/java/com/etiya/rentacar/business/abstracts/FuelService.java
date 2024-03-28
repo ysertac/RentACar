@@ -1,9 +1,8 @@
 package com.etiya.rentacar.business.abstracts;
 
-import com.etiya.rentacar.business.dtos.requests.FuelRequests.CreateFuelRequest;
-import com.etiya.rentacar.business.dtos.requests.FuelRequests.UpdateFuelRequest;
-import com.etiya.rentacar.business.dtos.responses.FuelResponses.*;
-import com.etiya.rentacar.entities.Fuel;
+import com.etiya.rentacar.business.dtos.requests.fuelRequests.CreateFuelRequest;
+import com.etiya.rentacar.business.dtos.requests.fuelRequests.UpdateFuelRequest;
+import com.etiya.rentacar.business.dtos.responses.fuelResponses.*;
 
 import java.util.List;
 

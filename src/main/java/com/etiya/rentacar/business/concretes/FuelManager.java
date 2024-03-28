@@ -1,12 +1,12 @@
 package com.etiya.rentacar.business.concretes;
 
 import com.etiya.rentacar.business.abstracts.FuelService;
-import com.etiya.rentacar.business.dtos.requests.FuelRequests.CreateFuelRequest;
-import com.etiya.rentacar.business.dtos.requests.FuelRequests.UpdateFuelRequest;
-import com.etiya.rentacar.business.dtos.responses.FuelResponses.CreatedFuelResponse;
-import com.etiya.rentacar.business.dtos.responses.FuelResponses.DeletedFuelResponse;
-import com.etiya.rentacar.business.dtos.responses.FuelResponses.GetFuelsResponse;
-import com.etiya.rentacar.business.dtos.responses.FuelResponses.UpdatedFuelResponse;
+import com.etiya.rentacar.business.dtos.requests.fuelRequests.CreateFuelRequest;
+import com.etiya.rentacar.business.dtos.requests.fuelRequests.UpdateFuelRequest;
+import com.etiya.rentacar.business.dtos.responses.fuelResponses.CreatedFuelResponse;
+import com.etiya.rentacar.business.dtos.responses.fuelResponses.DeletedFuelResponse;
+import com.etiya.rentacar.business.dtos.responses.fuelResponses.GetFuelsResponse;
+import com.etiya.rentacar.business.dtos.responses.fuelResponses.UpdatedFuelResponse;
 import com.etiya.rentacar.business.rules.FuelBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.FuelRepository;

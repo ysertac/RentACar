@@ -1,9 +1,8 @@
 package com.etiya.rentacar.business.abstracts;
 
-import com.etiya.rentacar.business.dtos.requests.ModelRequests.CreateModelRequest;
-import com.etiya.rentacar.business.dtos.requests.ModelRequests.UpdateModelRequest;
-import com.etiya.rentacar.business.dtos.responses.ModelResponses.*;
-import com.etiya.rentacar.entities.Model;
+import com.etiya.rentacar.business.dtos.requests.modelRequests.CreateModelRequest;
+import com.etiya.rentacar.business.dtos.requests.modelRequests.UpdateModelRequest;
+import com.etiya.rentacar.business.dtos.responses.modelResponses.*;
 
 import java.util.List;
 

@@ -1,12 +1,12 @@
 package com.etiya.rentacar.business.concretes;
 
 import com.etiya.rentacar.business.abstracts.TransmissionService;
-import com.etiya.rentacar.business.dtos.requests.TransmissionRequests.CreateTransmissionRequest;
-import com.etiya.rentacar.business.dtos.requests.TransmissionRequests.UpdateTransmissionRequest;
-import com.etiya.rentacar.business.dtos.responses.TransmissionResponses.CreatedTransmissionResponse;
-import com.etiya.rentacar.business.dtos.responses.TransmissionResponses.DeletedTransmissionResponse;
-import com.etiya.rentacar.business.dtos.responses.TransmissionResponses.GetTransmissionsResponse;
-import com.etiya.rentacar.business.dtos.responses.TransmissionResponses.UpdatedTransmissionResponse;
+import com.etiya.rentacar.business.dtos.requests.transmissionRequests.CreateTransmissionRequest;
+import com.etiya.rentacar.business.dtos.requests.transmissionRequests.UpdateTransmissionRequest;
+import com.etiya.rentacar.business.dtos.responses.transmissionResponses.CreatedTransmissionResponse;
+import com.etiya.rentacar.business.dtos.responses.transmissionResponses.DeletedTransmissionResponse;
+import com.etiya.rentacar.business.dtos.responses.transmissionResponses.GetTransmissionsResponse;
+import com.etiya.rentacar.business.dtos.responses.transmissionResponses.UpdatedTransmissionResponse;
 import com.etiya.rentacar.business.rules.TransmissionBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.TransmissionRepository;

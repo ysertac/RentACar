@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "rentalBranchs")
+@Table(name = "rentalBranches")
 public class RentalBranch extends BaseEntity {
     @Column(name = "name")
     private String name;
