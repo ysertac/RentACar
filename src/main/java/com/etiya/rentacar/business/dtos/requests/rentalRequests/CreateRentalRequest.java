@@ -6,6 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Locale;
+import java.util.Optional;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,8 +18,9 @@ public class CreateRentalRequest {
     @NotNull
     @Min(1)
     private long carId;
-
     @NotNull
     @Min(1)
     private long customerId;
+    private LocalDateTime StartDate;
+    private LocalDateTime EndDate;
 }

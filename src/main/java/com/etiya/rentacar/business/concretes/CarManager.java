@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -93,5 +94,12 @@ public class CarManager implements CarService {
                 .map(deletedCar, DeletedCarResponse.class);
 
         return deletedCarResponse;
+    }
+
+    @Override
+    public void updateCarStete(long carId, int state) {
+        Car foundCar = carRepository.findById(carId).orElse(null);
+        foundCar.setState(state);
+        carRepository.save(foundCar);
     }
 }

@@ -12,4 +12,5 @@ public interface CarService {
     CreatedCarResponse add(CreateCarRequest createCarRequest);
     UpdatedCarResponse update(UpdateCarRequest updateCarRequest, long id);
     DeletedCarResponse delete(long id);
+    void updateCarStete(long carId, int state);
 }

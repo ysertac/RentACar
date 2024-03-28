@@ -4,6 +4,7 @@ import com.etiya.rentacar.business.abstracts.CarService;
 import com.etiya.rentacar.business.abstracts.RentalService;
 import com.etiya.rentacar.business.dtos.requests.rentalRequests.CreateRentalRequest;
 import com.etiya.rentacar.business.dtos.requests.rentalRequests.UpdateRentalRequest;
+import com.etiya.rentacar.business.dtos.responses.carResponses.GetCarsResponse;
 import com.etiya.rentacar.business.dtos.responses.rentalResponses.CreatedRentalResponse;
 import com.etiya.rentacar.business.dtos.responses.rentalResponses.DeletedRentalResponse;
 import com.etiya.rentacar.business.dtos.responses.rentalResponses.GetRentalResponse;
@@ -11,6 +12,8 @@ import com.etiya.rentacar.business.dtos.responses.rentalResponses.UpdatedRentalR
 import com.etiya.rentacar.business.rules.RentalBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.RentalRepository;
+import com.etiya.rentacar.entities.Car;
+import com.etiya.rentacar.entities.Customer;
 import com.etiya.rentacar.entities.Rental;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -52,12 +55,20 @@ public class RentalManager implements RentalService {
 
     @Override
     public CreatedRentalResponse add(CreateRentalRequest createRentalRequest) {
+        GetCarsResponse getCarResponse = carService.findById(createRentalRequest.getCarId());
+        carService.updateCarStete(createRentalRequest.getCarId(), 2);
+        Car car = new Car();
+        car.setId(createRentalRequest.getCarId());
+
+        Customer customer = new Customer();
+        customer.setId(createRentalRequest.getCustomerId());
+
         Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
-        rental.setStartKilometer(carService.findById(createRentalRequest.getCarId()).getKilometer());
-        rental.setId(0);
+        rental.setStartKilometer(getCarResponse.getKilometer());
         Rental createdRental = rentalRepository.save(rental);
 
-        CreatedRentalResponse createdRentalResponse = modelMapperService.forResponse().map(createdRental, CreatedRentalResponse.class);
+        CreatedRentalResponse createdRentalResponse =
+                modelMapperService.forResponse().map(createdRental, CreatedRentalResponse.class);
         return createdRentalResponse;
     }
 

@@ -23,4 +23,5 @@ public class GetCarsResponse {
     private long brandId;
     private long fuelId;
     private long transmissionId;
+    private long rentalBranchId;
 }

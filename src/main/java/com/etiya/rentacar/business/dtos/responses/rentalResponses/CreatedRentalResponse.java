@@ -10,10 +10,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreatedRentalResponse {
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private long startKilometer;
-    private long endKilometer;
     private long carId;
     private long customerId;
+    private LocalDateTime StartDate;
+    private LocalDateTime EndDate;
+    private long startKilometer;
 }

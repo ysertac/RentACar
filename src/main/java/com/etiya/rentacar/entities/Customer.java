@@ -28,4 +28,13 @@ public class Customer extends BaseEntity {
 
     @Column(name = "phoneNumber")
     private String phoneNumber;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "password")
+    private String password;
 }
