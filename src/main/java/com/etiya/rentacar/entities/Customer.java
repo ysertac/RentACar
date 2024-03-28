@@ -1,9 +1,7 @@
 package com.etiya.rentacar.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.etiya.rentacar.core.entities.BaseEntity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,9 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "individualCustomer")
-public class IndividualCustomer extends User {
-    @OneToMany(mappedBy = "individualCustomer")
+@Table(name = "customer")
+public class Customer extends BaseEntity {
+    @OneToMany(mappedBy = "customer")
     private List<Rental> rentals;
 
     @Column(name = "firstName")
@@ -27,4 +25,7 @@ public class IndividualCustomer extends User {
 
     @Column(name = "identificationNumber")
     private String identificationNumber;
+
+    @Column(name = "phoneNumber")
+    private String phoneNumber;
 }
