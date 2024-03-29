@@ -27,14 +27,17 @@ public class CreateCustomerRequest {
     @NotNull
     @NotEmpty
     @NotBlank
+    @Size(min = 11, max = 11)
     @Pattern(regexp = "^[1-9]{1}[0-9]{9}[0,2,4,6,8]{1}$")
     private String identificationNumber;
     @NotBlank
     @NotEmpty
+    @Size(min = 10, max = 10)
     @Pattern(regexp = "([(]?)([5])([0-9]{2})([)]?)([\\s]?)([0-9]{3})([\\s]?)([0-9]{2})([\\s]?)([0-9]{2})$") // 546
     private String phoneNumber;
     @NotBlank
     @NotEmpty
+    @Size(min = 6, max = 30)
     @Pattern(regexp = "^[\\w-.]+@([\\w-]+.)+[\\w-]{2,4}$")
     private String email;
     @NotNull

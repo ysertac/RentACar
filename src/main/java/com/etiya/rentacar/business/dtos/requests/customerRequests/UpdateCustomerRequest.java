@@ -16,10 +16,12 @@ public class UpdateCustomerRequest {
     private String username;
     @NotBlank
     @NotEmpty
+    @Size(min = 10, max = 10)
     @Pattern(regexp = "([(]?)([5])([0-9]{2})([)]?)([\\s]?)([0-9]{3})([\\s]?)([0-9]{2})([\\s]?)([0-9]{2})$") // 546
     private String phoneNumber;
     @NotBlank
     @NotEmpty
+    @Size(min = 11, max = 11)
     @Pattern(regexp = "^[\\w-.]+@([\\w-]+.)+[\\w-]{2,4}$")
     private String email;
     @NotNull
