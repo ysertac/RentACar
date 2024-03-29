@@ -6,6 +6,7 @@ import com.etiya.rentacar.business.dtos.requests.rentalRequests.ReturnRentalRequ
 import com.etiya.rentacar.business.dtos.requests.rentalRequests.UpdateRentalRequest;
 import com.etiya.rentacar.business.dtos.responses.brandResponses.DeletedBrandResponse;
 import com.etiya.rentacar.business.dtos.responses.rentalResponses.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -32,19 +33,19 @@ public class RentalController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreatedRentalResponse add(@RequestBody CreateRentalRequest createRentalRequest) {
+    public CreatedRentalResponse add(@Valid @RequestBody CreateRentalRequest createRentalRequest) {
         return rentalService.add(createRentalRequest);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UpdatedRentalResponse update(@RequestBody UpdateRentalRequest updateRentalRequest, @PathVariable long id) {
+    public UpdatedRentalResponse update(@Valid @RequestBody UpdateRentalRequest updateRentalRequest, @PathVariable long id) {
         return rentalService.update(updateRentalRequest, id);
     }
 
     @PutMapping("return/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ReturnedRentalResponse returnRental(@RequestBody ReturnRentalRequest returnRentalRequest, @PathVariable long id) {
+    public ReturnedRentalResponse returnRental(@Valid @RequestBody ReturnRentalRequest returnRentalRequest, @PathVariable long id) {
         return rentalService.returnRental(returnRentalRequest, id);
     }
 

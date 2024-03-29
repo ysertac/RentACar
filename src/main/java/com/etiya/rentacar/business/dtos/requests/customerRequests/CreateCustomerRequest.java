@@ -1,9 +1,6 @@
 package com.etiya.rentacar.business.dtos.requests.customerRequests;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,18 +12,22 @@ public class CreateCustomerRequest {
     @NotNull
     @NotEmpty
     @NotBlank
+    @Size(min = 6, max = 15)
     private String username;
     @NotNull
     @NotEmpty
     @NotBlank
+    @Size(min = 3, max = 15)
     private String firstName;
     @NotNull
     @NotEmpty
     @NotBlank
+    @Size(min = 3, max = 15)
     private String lastName;
     @NotNull
     @NotEmpty
     @NotBlank
+    @Pattern(regexp = "^[1-9]{1}[0-9]{9}[0,2,4,6,8]{1}$")
     private String identificationNumber;
     @NotBlank
     @NotEmpty
@@ -39,5 +40,6 @@ public class CreateCustomerRequest {
     @NotNull
     @NotEmpty
     @NotBlank
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")
     private String password;
 }

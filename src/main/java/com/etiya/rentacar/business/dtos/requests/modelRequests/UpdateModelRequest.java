@@ -1,9 +1,6 @@
 package com.etiya.rentacar.business.dtos.requests.modelRequests;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,19 +11,18 @@ import lombok.NoArgsConstructor;
 public class UpdateModelRequest {
     @NotEmpty
     @NotBlank
-    @Size(min = 2, max = 15)
+    @Size(min = 2, max = 20)
     private String name;
 
     @NotNull
-    @NotEmpty
-    @NotBlank
+    @Min(1)
     private long fuelId;
 
     @NotNull
-    @NotEmpty
-    @NotBlank
+    @Min(1)
     private long transmissionId;
 
     @NotNull
+    @Min(1)
     private long brandID;
 }

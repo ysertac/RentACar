@@ -10,6 +10,7 @@ import com.etiya.rentacar.entities.Rental;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +49,19 @@ public class RentalBusinessRules {
         List<Rental> activeRentals = rentalRepository.findByCustomerIdAndReturnDateIsNull(customerId);
         if (!activeRentals.isEmpty()) {
             throw new BusinessException(RentalMessages.checkCustomerHasRented);
+        }
+    }
+
+    public void checkDates(LocalDateTime startDate, LocalDateTime endDate) {
+        if (startDate.isAfter(endDate)) {
+            throw new BusinessException(RentalMessages.checkDates);
+        }
+    }
+
+    public void checkKilometers(long rentalId) {
+        Rental foundRental = rentalRepository.findById(rentalId).orElse(null);
+        if (foundRental.getStartKilometer() > foundRental.getEndKilometer()) {
+            throw new BusinessException(RentalMessages.checkKilometers);
         }
     }
 }

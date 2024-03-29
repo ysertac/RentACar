@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class CreateFuelRequest {
     @NotEmpty
     @NotBlank
-    @Size(min = 2, max = 30)
+    @Size(min = 2, max = 20)
     private String name;
 }

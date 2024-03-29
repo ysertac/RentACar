@@ -54,6 +54,7 @@ public class RentalManager implements RentalService {
     public CreatedRentalResponse add(CreateRentalRequest createRentalRequest) {
         rentalBusinessRules.checkIfCarState(createRentalRequest.getCarId());
         rentalBusinessRules.checkCustomerHasRented(createRentalRequest.getCustomerId());
+        rentalBusinessRules.checkDates(createRentalRequest.getStartDate(), createRentalRequest.getEndDate());
 
         GetCarsResponse getCarResponse = carService.findById(createRentalRequest.getCarId());
         carService.updateCarState(createRentalRequest.getCarId(), 2, getCarResponse.getKilometer(), getCarResponse.getRentalBranchId());
@@ -76,6 +77,7 @@ public class RentalManager implements RentalService {
     public ReturnedRentalResponse returnRental(ReturnRentalRequest returnRentalRequest, long id) {
         rentalBusinessRules.rentalNotFound(id);
         rentalBusinessRules.deletedRental(id);
+        rentalBusinessRules.checkKilometers(id);
 
         Rental foundRental = rentalRepository.findById(id).orElse(null);
         carService.updateCarState(foundRental.getCar().getId(), 1, returnRentalRequest.getEndKilometer(), returnRentalRequest.getRentalBranchId());

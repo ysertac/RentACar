@@ -7,6 +7,7 @@ import com.etiya.rentacar.business.dtos.responses.rentalBranchResponses.CreatedR
 import com.etiya.rentacar.business.dtos.responses.rentalBranchResponses.DeletedRentalBranchResponse;
 import com.etiya.rentacar.business.dtos.responses.rentalBranchResponses.GetRentalBranchResponse;
 import com.etiya.rentacar.business.dtos.responses.rentalBranchResponses.UpdatedRentalBranchResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class RentalBranchesController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreatedRentalBranchResponse add(@RequestBody CreateRentalBranchRequest createRentalBranchRequest) {
+    public CreatedRentalBranchResponse add(@Valid @RequestBody CreateRentalBranchRequest createRentalBranchRequest) {
         return rentalBranchService.add(createRentalBranchRequest);
     }
 
@@ -39,7 +40,7 @@ public class RentalBranchesController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UpdatedRentalBranchResponse update(@RequestBody UpdateRentalBranchRequest updateRentalBranchRequest,@PathVariable long id) {
+    public UpdatedRentalBranchResponse update(@Valid @RequestBody UpdateRentalBranchRequest updateRentalBranchRequest, @PathVariable long id) {
         return rentalBranchService.update(updateRentalBranchRequest, id);
     }
 

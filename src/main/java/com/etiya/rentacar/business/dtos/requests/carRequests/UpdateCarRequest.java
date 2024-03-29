@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateCarRequest {
     @NotNull
-    @Min(2000)
+    @Min(1970)
     @Max(2024)
     private int modelYear;
 
@@ -29,10 +29,14 @@ public class UpdateCarRequest {
     private String plate;
 
     @NotNull
-    @Min(1000)
+    @Min(500)
     private double dailyPrice;
 
     @NotNull
     @Min(1)
     private long modelId;
+
+    @NotNull
+    @Min(1)
+    private long rentalBranchId;
 }
