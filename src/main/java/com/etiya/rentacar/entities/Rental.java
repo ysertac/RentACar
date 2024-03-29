@@ -20,6 +20,9 @@ public class Rental extends BaseEntity {
     @Column(name = "endDate")
     private LocalDateTime endDate;
 
+    @Column(name = "returnDate")
+    private LocalDateTime returnDate;
+
     @Column(name = "startKilometer")
     private long startKilometer;
 

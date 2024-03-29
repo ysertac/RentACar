@@ -11,6 +11,7 @@ import com.etiya.rentacar.business.rules.CarBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.CarRepository;
 import com.etiya.rentacar.entities.Car;
+import com.etiya.rentacar.entities.RentalBranch;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -97,9 +98,14 @@ public class CarManager implements CarService {
     }
 
     @Override
-    public void updateCarStete(long carId, int state) {
+    public void updateCarState(long carId, int state, int km, long rentalBranchId) {
+        RentalBranch rentalBranch = new RentalBranch();
+        rentalBranch.setId(rentalBranchId);
+
         Car foundCar = carRepository.findById(carId).orElse(null);
         foundCar.setState(state);
+        foundCar.setKilometer(km);
+        foundCar.setRentalBranch(rentalBranch);
         carRepository.save(foundCar);
     }
 }

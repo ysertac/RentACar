@@ -1,5 +1,6 @@
 package com.etiya.rentacar.business.rules;
 
+import com.etiya.rentacar.business.messages.CityMessages;
 import com.etiya.rentacar.core.exceptions.types.BusinessException;
 import com.etiya.rentacar.dataAccess.abstracts.CityRepository;
 import com.etiya.rentacar.entities.Car;
@@ -18,7 +19,7 @@ public class CityBusinessRules {
         Optional<City> foundCity = cityRepository.findByNameIgnoreCase(cityName);
 
         if (foundCity.isPresent() && foundCity.get().getDeletedDate() == null) {
-            throw new BusinessException("This city already exists");
+            throw new BusinessException(CityMessages.cityNameCannotBeDuplicated);
         }
     }
 
@@ -26,7 +27,7 @@ public class CityBusinessRules {
         Optional<City> foundCar = cityRepository.findById(id);
 
         if (!foundCar.isPresent()) {
-            throw new BusinessException("There is no car with this id");
+            throw new BusinessException(CityMessages.cityNotFound);
         }
     }
 
@@ -34,7 +35,7 @@ public class CityBusinessRules {
         City foundCar = cityRepository.findById(id).orElse(null);
 
         if (foundCar.getDeletedDate() != null) {
-            throw new BusinessException("This car is deleted");
+            throw new BusinessException(CityMessages.deletedCity);
         }
     }
 }

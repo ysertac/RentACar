@@ -1,5 +1,6 @@
 package com.etiya.rentacar.business.rules;
 
+import com.etiya.rentacar.business.messages.CustomerMessages;
 import com.etiya.rentacar.core.exceptions.types.BusinessException;
 import com.etiya.rentacar.dataAccess.abstracts.CustomerRepository;
 import com.etiya.rentacar.entities.Customer;
@@ -17,7 +18,7 @@ public class CustomerBusinessRules {
         Customer foundCustomer = customerRepository.findByUsernameIgnoreCase(username);
 
         if (foundCustomer != null && foundCustomer.getDeletedDate() == null) {
-            throw new BusinessException("This Customer username already exists");
+            throw new BusinessException(CustomerMessages.customerUsernameCannotBeDuplicated);
         }
 
     }
@@ -26,7 +27,7 @@ public class CustomerBusinessRules {
         Optional<Customer> foundCustomer = customerRepository.findById(customerId);
 
         if (!foundCustomer.isPresent()) {
-            throw new BusinessException("There is no Customer with this id");
+            throw new BusinessException(CustomerMessages.customerNotFound);
         }
 
     }
@@ -34,7 +35,7 @@ public class CustomerBusinessRules {
     public void deletedCustomer(long customerId) {
         Customer foundCustomer = customerRepository.findById(customerId).orElse(null);
         if (foundCustomer.getDeletedDate() != null) {
-            throw new BusinessException("This Customer is deleted");
+            throw new BusinessException(CustomerMessages.deletedCustomer);
         }
     }
 }

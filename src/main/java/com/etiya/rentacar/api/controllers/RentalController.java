@@ -2,12 +2,10 @@ package com.etiya.rentacar.api.controllers;
 
 import com.etiya.rentacar.business.abstracts.RentalService;
 import com.etiya.rentacar.business.dtos.requests.rentalRequests.CreateRentalRequest;
+import com.etiya.rentacar.business.dtos.requests.rentalRequests.ReturnRentalRequest;
 import com.etiya.rentacar.business.dtos.requests.rentalRequests.UpdateRentalRequest;
 import com.etiya.rentacar.business.dtos.responses.brandResponses.DeletedBrandResponse;
-import com.etiya.rentacar.business.dtos.responses.rentalResponses.CreatedRentalResponse;
-import com.etiya.rentacar.business.dtos.responses.rentalResponses.DeletedRentalResponse;
-import com.etiya.rentacar.business.dtos.responses.rentalResponses.GetRentalResponse;
-import com.etiya.rentacar.business.dtos.responses.rentalResponses.UpdatedRentalResponse;
+import com.etiya.rentacar.business.dtos.responses.rentalResponses.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +40,12 @@ public class RentalController {
     @ResponseStatus(HttpStatus.OK)
     public UpdatedRentalResponse update(@RequestBody UpdateRentalRequest updateRentalRequest, @PathVariable long id) {
         return rentalService.update(updateRentalRequest, id);
+    }
+
+    @PutMapping("return/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ReturnedRentalResponse returnRental(@RequestBody ReturnRentalRequest returnRentalRequest, @PathVariable long id) {
+        return rentalService.returnRental(returnRentalRequest, id);
     }
 
     @DeleteMapping("/{id}")

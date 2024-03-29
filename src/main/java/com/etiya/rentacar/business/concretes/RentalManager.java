@@ -3,12 +3,10 @@ package com.etiya.rentacar.business.concretes;
 import com.etiya.rentacar.business.abstracts.CarService;
 import com.etiya.rentacar.business.abstracts.RentalService;
 import com.etiya.rentacar.business.dtos.requests.rentalRequests.CreateRentalRequest;
+import com.etiya.rentacar.business.dtos.requests.rentalRequests.ReturnRentalRequest;
 import com.etiya.rentacar.business.dtos.requests.rentalRequests.UpdateRentalRequest;
 import com.etiya.rentacar.business.dtos.responses.carResponses.GetCarsResponse;
-import com.etiya.rentacar.business.dtos.responses.rentalResponses.CreatedRentalResponse;
-import com.etiya.rentacar.business.dtos.responses.rentalResponses.DeletedRentalResponse;
-import com.etiya.rentacar.business.dtos.responses.rentalResponses.GetRentalResponse;
-import com.etiya.rentacar.business.dtos.responses.rentalResponses.UpdatedRentalResponse;
+import com.etiya.rentacar.business.dtos.responses.rentalResponses.*;
 import com.etiya.rentacar.business.rules.RentalBusinessRules;
 import com.etiya.rentacar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentacar.dataAccess.abstracts.RentalRepository;
@@ -30,7 +28,6 @@ public class RentalManager implements RentalService {
     private CarService carService;
     private ModelMapperService modelMapperService;
     private RentalBusinessRules rentalBusinessRules;
-
 
     @Override
     public GetRentalResponse findById(long id) {
@@ -55,10 +52,11 @@ public class RentalManager implements RentalService {
 
     @Override
     public CreatedRentalResponse add(CreateRentalRequest createRentalRequest) {
+        rentalBusinessRules.checkIfCarState(createRentalRequest.getCarId());
+        rentalBusinessRules.checkCustomerHasRented(createRentalRequest.getCustomerId());
+
         GetCarsResponse getCarResponse = carService.findById(createRentalRequest.getCarId());
-        carService.updateCarStete(createRentalRequest.getCarId(), 2);
-        Car car = new Car();
-        car.setId(createRentalRequest.getCarId());
+        carService.updateCarState(createRentalRequest.getCarId(), 2, getCarResponse.getKilometer(), getCarResponse.getRentalBranchId());
 
         Customer customer = new Customer();
         customer.setId(createRentalRequest.getCustomerId());
@@ -69,11 +67,42 @@ public class RentalManager implements RentalService {
 
         CreatedRentalResponse createdRentalResponse =
                 modelMapperService.forResponse().map(createdRental, CreatedRentalResponse.class);
+        createdRentalResponse.setStartDate(createdRental.getStartDate());
+        createdRentalResponse.setStartKilometer(createdRental.getStartKilometer());
         return createdRentalResponse;
     }
 
     @Override
+    public ReturnedRentalResponse returnRental(ReturnRentalRequest returnRentalRequest, long id) {
+        rentalBusinessRules.rentalNotFound(id);
+        rentalBusinessRules.deletedRental(id);
+
+        Rental foundRental = rentalRepository.findById(id).orElse(null);
+        carService.updateCarState(foundRental.getCar().getId(), 1, returnRentalRequest.getEndKilometer(), returnRentalRequest.getRentalBranchId());
+
+        Rental rental = modelMapperService.forRequest().map(returnRentalRequest, Rental.class);
+        rental.setId(id);
+        rental.setCreatedDate(foundRental.getCreatedDate());
+        rental.setUpdatedDate(LocalDateTime.now());
+        rental.setStartDate(foundRental.getStartDate());
+        rental.setEndDate(foundRental.getEndDate());
+        rental.setReturnDate(LocalDateTime.now());
+        rental.setStartKilometer(foundRental.getStartKilometer());
+        rental.setCar(foundRental.getCar());
+        rental.setCustomer(foundRental.getCustomer());
+        Rental returnedRental = rentalRepository.save(rental);
+
+        ReturnedRentalResponse response = modelMapperService.forResponse().map(returnedRental, ReturnedRentalResponse.class);
+        response.setStartKilometer(rental.getStartKilometer());
+        response.setEndKilometer(rental.getEndKilometer());
+        response.setStartDate(rental.getStartDate());
+        response.setEndDate(rental.getEndDate());
+        return response;
+    }
+
+    @Override
     public UpdatedRentalResponse update(UpdateRentalRequest updateRentalRequest, long id) {
+        rentalBusinessRules.checkIfCarState(updateRentalRequest.getCarId());
         rentalBusinessRules.rentalNotFound(id);
         rentalBusinessRules.deletedRental(id);
 
@@ -103,4 +132,5 @@ public class RentalManager implements RentalService {
                 modelMapperService.forResponse().map(deletedRental, DeletedRentalResponse.class);
         return deletedRentalResponse;
     }
+
 }

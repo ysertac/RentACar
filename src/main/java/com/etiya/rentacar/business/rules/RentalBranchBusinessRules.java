@@ -1,5 +1,6 @@
 package com.etiya.rentacar.business.rules;
 
+import com.etiya.rentacar.business.messages.RentalBranchMessages;
 import com.etiya.rentacar.core.exceptions.types.BusinessException;
 import com.etiya.rentacar.dataAccess.abstracts.RentalBranchRepository;
 import com.etiya.rentacar.entities.Brand;
@@ -18,7 +19,7 @@ public class RentalBranchBusinessRules {
         Optional<RentalBranch> foundRentalBranch = rentalBranchRepository.findByNameIgnoreCase(brandName);
 
         if (foundRentalBranch.isPresent() && foundRentalBranch.get().getDeletedDate() == null) {
-            throw new BusinessException("This Rental Branch name already exists");
+            throw new BusinessException(RentalBranchMessages.rentalBranchNameCannotBeDuplicated);
         }
     }
 
@@ -26,7 +27,7 @@ public class RentalBranchBusinessRules {
         Optional<RentalBranch> foundRentalBranch = rentalBranchRepository.findById(brandId);
 
         if (!foundRentalBranch.isPresent()) {
-            throw new BusinessException("There is no Rental Branch with this id");
+            throw new BusinessException(RentalBranchMessages.rentalBranchNotFound);
         }
     }
 
@@ -34,7 +35,7 @@ public class RentalBranchBusinessRules {
         RentalBranch foundRentalBranch = rentalBranchRepository.findById(id).orElse(null);
 
         if (foundRentalBranch.getDeletedDate() != null) {
-            throw new BusinessException("This Rental Branch is deleted");
+            throw new BusinessException(RentalBranchMessages.deletedRentalBranch);
         }
     }
 }

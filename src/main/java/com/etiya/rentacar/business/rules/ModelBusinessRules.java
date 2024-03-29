@@ -1,5 +1,6 @@
 package com.etiya.rentacar.business.rules;
 
+import com.etiya.rentacar.business.messages.ModelMessages;
 import com.etiya.rentacar.core.exceptions.types.BusinessException;
 import com.etiya.rentacar.dataAccess.abstracts.ModelRepository;
 import com.etiya.rentacar.entities.Model;
@@ -17,7 +18,7 @@ public class ModelBusinessRules {
         Optional<Model> foundModel = modelRepository.findByNameIgnoreCase(modelName);
 
         if (foundModel.isPresent() && foundModel.get().getDeletedDate() == null) {
-            throw new BusinessException("This model already exists");
+            throw new BusinessException(ModelMessages.modelNameCannotBeDuplicated);
         }
     }
 
@@ -25,7 +26,7 @@ public class ModelBusinessRules {
         Optional<Model> foundModel = modelRepository.findById(id);
 
         if (!foundModel.isPresent()) {
-            throw new BusinessException("There is no model with this id");
+            throw new BusinessException(ModelMessages.modelNotFound);
         }
     }
 
@@ -33,7 +34,7 @@ public class ModelBusinessRules {
         Model foundModel = modelRepository.findById(id).orElse(null);
 
         if (foundModel.getDeletedDate() != null) {
-            throw new BusinessException("This model is deleted!");
+            throw new BusinessException(ModelMessages.deletedModel);
         }
     }
 }

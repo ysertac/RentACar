@@ -43,12 +43,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({RuntimeException.class})
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
     public ProblemDetails handleEntityNotFoundException(RuntimeException exception) {
 
         ProblemDetails problemDetails = new ProblemDetails();
-        problemDetails.setStatus(HttpStatus.BAD_REQUEST.toString());
-        problemDetails.setDetail(exception.getClass().getSimpleName());
+        problemDetails.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+        problemDetails.setDetail(exception.getMessage());
         problemDetails.setType("http://etiya.com/exceptions/other");
         problemDetails.setTitle("Other Exception");
         return problemDetails;
